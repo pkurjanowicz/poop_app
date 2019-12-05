@@ -82,4 +82,20 @@ def sms_ahoy_reply():
     &ApiVersion=2010-04-01
     """
 
+@sms_api.route('/get-poops', methods=['GET'])
+def render_app():
+    has_shant_pooped = update_status()
+    if has_shant_pooped == True:
+        return jsonify({
+            'message':'Yes',
+            'last_poop_date': last_poop_date(),
+            'poop_message': poop_message(), 
+            'poop_rating': poop_rating()
+        })
+    return jsonify({
+            'message':'No',
+            'last_poop_date': last_poop_date(),
+            'poop_message': poop_message(), 
+            'poop_rating': poop_rating()
+        })
 
