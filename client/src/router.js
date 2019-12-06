@@ -8,9 +8,9 @@ vue router will load component(this corresponds with the file names
   html. Note that these props aren't really used too often */
 const routerOptions = [
   { path: '/', 
-    component: 'home', 
+    component: 'status', 
     props: {
-      title: 'Home Page',
+      title: 'status',
       },
     },
 ]
@@ -19,7 +19,7 @@ route to the component in the views folder*/
 const routes = routerOptions.map(route => {
   return {
     ...route,
-    component: () => import(`@/views/${route.component}.vue`)
+    component: () => import(`@/components/${route.component}.vue`)
   }
 })
 Vue.use(VueRouter)
