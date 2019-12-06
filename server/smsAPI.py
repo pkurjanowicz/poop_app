@@ -48,6 +48,8 @@ def sms_ahoy_reply():
     number = request.args.get('From')
     body = request.args.get('Body')
     rating = request.args.get('poop_rating')
+    if rating > '5':
+        rating = '5'
     if verify_shant(number):
         date_format='%m-%d-%Y'
         date = datetime.datetime.now(tz=pytz.utc)
