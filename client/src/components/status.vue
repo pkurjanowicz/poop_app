@@ -2,7 +2,7 @@
   <div class="general-status">
     <h1>Did Shant Poop Today?</h1>
       <h2>{{message}}</h2>
-      <p>Shant's last poop date: <em><b>{{last_poop_date}}</b></em></p><br>
+      <p>Shant's last poop date: <em><b>{{last_poop_date}}</b></em></p>
       <div class='rating'>
         <p>Shant's message while pooping: <em><b>{{poop_message}}</b></em></p>    
         <p class='poop-rating'>
@@ -53,6 +53,7 @@ export default {
     getPoopDetails() {
       axios.get('get-poops')
       .then(resp => {
+        console.log(resp)
         this.message = resp.data.message
         this.last_poop_date = resp.data.last_poop_date
         this.poop_message = resp.data.poop_message
@@ -156,5 +157,35 @@ em b{
 .like-comment-box input[type="image"] {
   max-height: 30px;
 }
+
+/* mobile styles */
+@media only screen and (max-width: 450px) {
+      .rating {
+        padding: 0;
+        width: 100%;
+        box-shadow: none;
+    }
+    .general-status h1 {
+      font-size: 24px;
+    }
+    .general-status h2 {
+      font-size: 20px;
+    }
+    .general-status p {
+      margin: 6px 0;
+    }
+    .general-status img{
+      max-height: 15px;
+}
+  }
+  
+  /* Tablet Styles */
+  @media only screen and (min-width: 450px) and (max-width: 1025px) {
+    .rating {
+        padding: 0;
+        width: 100%;
+        box-shadow: none;
+    }
+  }
 
 </style>

@@ -12,19 +12,25 @@ sms_api = Blueprint('sms_api', __name__)
 def last_poop_date():
     last_poop_date = Messages.query.filter_by(pooper_name='Shant').all()
     poop_item_list =  [poop_date.poop_date for poop_date in last_poop_date]
-    last_poop_date = poop_item_list[-1]
+    print('THIS IS POOP DATE: ')
+    print(poop_item_list[0])
+    last_poop_date = poop_item_list[0]
     return last_poop_date
 
 def poop_message():
     poop_messages = Messages.query.filter_by(pooper_name='Shant').all()
     poop_item_list =  [poop_message.poop_message for poop_message in poop_messages]
-    last_poop_message = poop_item_list[-1]
+    print('THIS IS POOP MESSAGE ')
+    print(poop_item_list[0])
+    last_poop_message = poop_item_list[0]
     return last_poop_message
 
 def poop_rating():
     poop_ratings = Messages.query.filter_by(pooper_name='Shant').all()
     poop_item_list =  [poop_rating.poop_rating for poop_rating in poop_ratings]
-    last_poop_rating = poop_item_list[-1]
+    print('THIS IS POOP RATING: ')
+    print(poop_item_list[0])
+    last_poop_rating = poop_item_list[0]
     return last_poop_rating
 
 def verify_shant(number):
