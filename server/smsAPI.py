@@ -3,7 +3,6 @@ from twilio.twiml.messaging_response import MessagingResponse
 import datetime
 from models import Messages
 from db_instance import db
-from models import Messages
 import pytz
 from pytz import timezone
 
@@ -100,4 +99,5 @@ def render_app():
             'poop_message': poop_message(), 
             'poop_rating': poop_rating()
         })
+
 

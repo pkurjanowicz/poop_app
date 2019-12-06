@@ -11,11 +11,11 @@
         </p>
         <div class='num-of-likes'>
           <img :src='num_likes'/>
-          <span>1</span>
+          <span>{{likes}}</span>
         </div>
         <hr>
         <div class="like-comment-box">
-          <span><input type='image' :src='like_btn'/></span><span>Comment</span>
+          <span><input type='image' :src='like_btn' @click='like_post()'/></span><span>Comment</span>
         </div>
         <hr>
         <p><button>Login to Comment</button></p>
@@ -46,6 +46,7 @@ export default {
         poop_message: '',
         poop_rating: '',
         poop_rating_array: [], //this is to interate through and generate emojis
+        likes: '',
       }
     },
     methods: {
@@ -59,7 +60,29 @@ export default {
         //this for loop just determines how many emojis will be used
         for (let step = 0; step < Number(this.poop_rating); step++) {
         this.poop_rating_array.push('0')
+        this.getCurrentLikes()
       }
+      })
+    },
+    like_post() {
+      axios.post('like-post',{
+        post_message: this.poop_message
+      })
+      .then(resp => {
+        this.likes = resp.data.likes
+      })
+    },
+    getCurrentLikes() {
+      axios.post('get-likes', {
+        post_message: this.poop_message
+      })
+      .then(resp => {
+        this.likes = resp.data.likes
+        if (this.likes != null) {
+          this.likes = resp.data.likes
+        } else {
+          this.likes = '0'
+        }
       })
     }
   },
