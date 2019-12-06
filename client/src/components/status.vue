@@ -4,8 +4,10 @@
       <h2>{{message}}</h2>
       <p>Shant's last poop date: <em><b>{{last_poop_date}}</b></em></p>
       <p>Shant's message while pooping: <em><b>{{poop_message}}</b></em></p>
-      <p>Poop Rating(out of 5):</p>
-      <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='image'/></span>
+      <div class='rating'>
+        <p>Poop Rating(out of 5):</p>
+        <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='image'/></span>
+      </div>
   </div>
 </template>
 
@@ -47,8 +49,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.general-status {
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+}
 .general-status img{
   max-height: 30px;
+}
+em b{
+  color: rgb(152, 0, 0);
 }
 
 </style>
