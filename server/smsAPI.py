@@ -8,30 +8,11 @@ from pytz import timezone
 
 sms_api = Blueprint('sms_api', __name__)
 
-#Helper functions
-def last_poop_date():
-    last_poop_date = Messages.query.filter_by(pooper_name='Shant').all()
-    poop_item_list =  [poop_date.poop_date for poop_date in last_poop_date]
-    print('THIS IS POOP DATE: ')
-    print(poop_item_list[0])
-    last_poop_date = poop_item_list[0]
-    return last_poop_date
-
-def poop_message():
-    poop_messages = Messages.query.filter_by(pooper_name='Shant').all()
-    poop_item_list =  [poop_message.poop_message for poop_message in poop_messages]
-    print('THIS IS POOP MESSAGE ')
-    print(poop_item_list[0])
-    last_poop_message = poop_item_list[0]
-    return last_poop_message
-
-def poop_rating():
-    poop_ratings = Messages.query.filter_by(pooper_name='Shant').all()
-    poop_item_list =  [poop_rating.poop_rating for poop_rating in poop_ratings]
-    print('THIS IS POOP RATING: ')
-    print(poop_item_list[0])
-    last_poop_rating = poop_item_list[0]
-    return last_poop_rating
+def get_poop():
+    poops = Messages.query.filter_by(pooper_name='Shant').all()
+    poop_list_of_dicts=[{'id':poop.id, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating} for poop in poops ]
+    poop_list_of_dicts_sorted = sorted(poop_list_of_dicts, key = lambda i: i['id'])
+    return poop_list_of_dicts_sorted[-1]
 
 def verify_shant(number):
     if number == '+12032312081' or number == "+18186068167":
@@ -43,7 +24,7 @@ def update_status():
     date = datetime.datetime.now(tz=pytz.utc)
     date = date.astimezone(timezone('US/Pacific'))
     date_today = date.strftime(date_format)
-    if date_today != last_poop_date():
+    if date_today != get_poop()['date']:
         return False
     return True
 
@@ -95,15 +76,15 @@ def render_app():
     if has_shant_pooped == True:
         return jsonify({
             'message':'Yes',
-            'last_poop_date': last_poop_date(),
-            'poop_message': poop_message(), 
-            'poop_rating': poop_rating()
+            'last_poop_date': get_poop()['date'],
+            'poop_message': get_poop()['message'], 
+            'poop_rating': get_poop()['rating']
         })
     return jsonify({
             'message':'No',
-            'last_poop_date': last_poop_date(),
-            'poop_message': poop_message(), 
-            'poop_rating': poop_rating()
+            'last_poop_date': get_poop()['date'],
+            'poop_message': get_poop()['message'], 
+            'poop_rating': get_poop()['rating']
         })
 
 

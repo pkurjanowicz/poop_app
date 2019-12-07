@@ -25,7 +25,7 @@
           <br>
         </div>
         <div class='commit-submit'>
-        <input type='text' placeholder="Leave a Comment...">
+        <input type='text' placeholder="Leave a Comment..." v-on:keyup.enter='submitComment()' v-model='comment'>
         </div>
       </div>
   </div>
@@ -47,6 +47,7 @@ export default {
         poop_rating: '',
         poop_rating_array: [], //this is to interate through and generate emojis
         likes: '',
+        comment: '',
       }
     },
     methods: {
@@ -85,6 +86,12 @@ export default {
           this.likes = '0'
         }
       })
+    },
+    submitComment() {
+      console.log(this.comment)
+      // axios.post('submit-comment',{
+      //   comment: this.comment
+      // })
     }
   },
   mounted() {
@@ -113,7 +120,8 @@ em b{
 }
 
 .comments-box {
-  border: 3px solid black;
+  display: flex;
+  flex-direction: column;
 }
 
 .like-comment-box {
