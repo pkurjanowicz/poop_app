@@ -39,12 +39,17 @@
         class='topRated'
         :poops='poop'
         />
+      <Slide class='mobile-navbar'>
+        <a id="home" href="/"><span>Home</span></a>
+        <a id="home" href="/upload"><span>Liked Poops</span></a>
+      </Slide>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import topRated from '/Users/peterkurjanowicz/Desktop/Interesting Projects/poop_app/client/src/components/topRated.vue';
+import topRated from '../components/topRated.vue';
+import { Slide } from 'vue-burger-menu' 
 
 export default {
   name: 'status',
@@ -72,7 +77,8 @@ export default {
       }
     },
     components: {
-      topRated
+      topRated,
+      Slide
     },
     methods: {
     getPoopDetails() {
@@ -159,10 +165,9 @@ export default {
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .topRated {
-  /* display: flex;
-  flex-direction: column; */
   margin: 30px;
 }
+
 .general-status {
   display: flex;
   flex-direction: column;
@@ -268,12 +273,19 @@ em b{
   display:flex;
 }
 
+.mobile-navbar {
+    display:none;
+}
+
 /* mobile styles */
 @media only screen and (max-width: 450px) {
       .rating {
         padding: 0;
         width: 100%;
         box-shadow: none;
+    }
+    .general-status {
+      margin: 70px 30px;
     }
     .general-status h1 {
       font-size: 24px;
@@ -286,8 +298,14 @@ em b{
     }
     .general-status img{
       max-height: 15px;
-}
   }
+  .topRated {
+    display:none;
+    }
+  .mobile-navbar {
+    display:block;
+    }
+}
   
   /* Tablet Styles */
   @media only screen and (min-width: 450px) and (max-width: 1025px) {
@@ -296,6 +314,16 @@ em b{
         width: 100%;
         box-shadow: none;
     }
+    .general-status {
+      margin: 70px 30px;
+    }
+    .topRated {
+    display:none;
+    }
+    .mobile-navbar {
+    display:block;
+    }
   }
+
 
 </style>
