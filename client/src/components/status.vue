@@ -1,43 +1,50 @@
 <template>
-  <div class="general-status">
-    <h1>Did Shant Poop Today?</h1>
-      <h2>{{message}}</h2>
-      <p>Shant's last poop date: <em><b>{{last_poop_date}}</b></em></p>
-      <div class='rating'>
-        <p>Shant's message while pooping: <em><b>{{poop_message}}</b></em></p>    
-        <p class='poop-rating'>
-          <span>Poop Rating(out of 5):</span>
-          <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='poop_emoji'/></span>
-        </p>
-        <div class='num-of-likes'>
-          <img :src='num_likes'/>
-          <span>{{likes}}</span>
-        </div>
-        <hr>
-        <div class="like-comment-box">
-          <span><input type='image' :src='like_btn' @click='like_post()'/></span>
-        </div>
-        <hr>
-        <div class='little-message-box'>
-          <p class='little-message'>Press enter or return to submit message and username</p>
-        </div>
-        <p><button v-if='displayLoginBtn' @click='commentLogin'>Login to Comment</button></p>
-        <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
-        <div class='comments-box'>
-          <div class='comment' v-for='(comment, index) in comments' :key='index'>
-            <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
+  <div class='main-container'>
+    <div class="general-status">
+      <h1>Did Shant Poop Today?</h1>
+        <h2>{{message}}</h2>
+        <p>Shant's last poop date: <em><b>{{last_poop_date}}</b></em></p>
+        <div class='rating'>
+          <p>Shant's message while pooping: <em><b>{{poop_message}}</b></em></p>    
+          <p class='poop-rating'>
+            <span>Poop Rating(out of 5):</span>
+            <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='poop_emoji'/></span>
+          </p>
+          <div class='num-of-likes'>
+            <img :src='num_likes'/>
+            <span>{{likes}}</span>
+          </div>
+          <hr>
+          <div class="like-comment-box">
+            <span><input type='image' :src='like_btn' @click='like_post()'/></span>
+          </div>
+          <hr>
+          <div class='little-message-box'>
+            <p class='little-message'>Press enter or return to submit message and username</p>
+          </div>
+          <p><button v-if='displayLoginBtn' @click='commentLogin'>Login to Comment</button></p>
+          <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
+          <div class='comments-box'>
+            <div class='comment' v-for='(comment, index) in comments' :key='index'>
+              <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
+            </div>
+          </div>
+          <div class='commit-submit'>
+          <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
+          
           </div>
         </div>
-        <div class='commit-submit'>
-        <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
-        
-        </div>
       </div>
+      <topRated 
+        class='topRated'
+        :poops='poop'
+        />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import topRated from '/Users/peterkurjanowicz/Desktop/Interesting Projects/poop_app/client/src/components/topRated.vue';
 
 export default {
   name: 'status',
@@ -60,7 +67,12 @@ export default {
         placeHolder: 'Leave a Comment...',
         userNameEntered: false,
         comments: '',
+        poop: 'this is a message',
+        nothing: '',
       }
+    },
+    components: {
+      topRated
     },
     methods: {
     getPoopDetails() {
@@ -107,6 +119,7 @@ export default {
         message: this.message_id
       })
       .then(resp => {
+        this.nothing = resp
         this.comment = ''
         this.getAllComments()
       })
@@ -140,8 +153,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.general-status {
+.main-container {
+  display: flex;
+  flex-direction: row;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.topRated {
+  /* display: flex;
+  flex-direction: column; */
+  margin: 30px;
+}
+.general-status {
   display: flex;
   flex-direction: column;
   margin: 30px;
