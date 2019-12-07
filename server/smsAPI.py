@@ -78,13 +78,15 @@ def render_app():
             'message':'Yes',
             'last_poop_date': get_poop()['date'],
             'poop_message': get_poop()['message'], 
-            'poop_rating': get_poop()['rating']
+            'poop_rating': get_poop()['rating'],
+            'poop_id': get_poop()['id']
         })
     return jsonify({
             'message':'No',
             'last_poop_date': get_poop()['date'],
             'poop_message': get_poop()['message'], 
-            'poop_rating': get_poop()['rating']
+            'poop_rating': get_poop()['rating'],
+            'poop_id': get_poop()['id']
         })
 
 

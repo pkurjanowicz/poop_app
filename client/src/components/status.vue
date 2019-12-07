@@ -15,17 +15,18 @@
         </div>
         <hr>
         <div class="like-comment-box">
-          <span><input type='image' :src='like_btn' @click='like_post()'/></span><span>Comment</span>
+          <span><input type='image' :src='like_btn' @click='like_post()'/></span>
         </div>
         <hr>
-        <p><button>Login to Comment</button></p>
+        <p><button v-if='displayLoginBtn' @click='commentLogin'>Login to Comment</button></p>
+        <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
         <div class='comments-box'>
-          <br>
-          <br>
-          <br>
+          <div class='comment' v-for='(comment, index) in comments' :key='index'>
+            <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
+          </div>
         </div>
         <div class='commit-submit'>
-        <input type='text' placeholder="Leave a Comment..." v-on:keyup.enter='submitComment()' v-model='comment'>
+        <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
         </div>
       </div>
   </div>
@@ -48,22 +49,30 @@ export default {
         poop_rating_array: [], //this is to interate through and generate emojis
         likes: '',
         comment: '',
+        message_id: '',
+        displayLoginBtn: true,
+        modelNameValue: '',
+        userName: '',
+        placeHolder: 'Leave a Comment...',
+        userNameEntered: false,
+        comments: '',
       }
     },
     methods: {
     getPoopDetails() {
       axios.get('get-poops')
       .then(resp => {
-        console.log(resp)
         this.message = resp.data.message
         this.last_poop_date = resp.data.last_poop_date
         this.poop_message = resp.data.poop_message
         this.poop_rating = resp.data.poop_rating
+        this.message_id = resp.data.poop_id
         //this for loop just determines how many emojis will be used
         for (let step = 0; step < Number(this.poop_rating); step++) {
         this.poop_rating_array.push('0')
+        }
         this.getCurrentLikes()
-      }
+        this.getAllComments()
       })
     },
     like_post() {
@@ -88,14 +97,40 @@ export default {
       })
     },
     submitComment() {
-      console.log(this.comment)
-      // axios.post('submit-comment',{
-      //   comment: this.comment
-      // })
+      axios.post('submit-comment',{
+        comment: this.comment,
+        name: this.userName,
+        message: this.message_id
+      })
+      .then(resp => {
+        console.log(resp)
+        this.comment = ''
+        this.getAllComments()
+      })
+    },
+    commentLogin() {
+      this.displayLoginBtn = false
+    },
+    enterUserName() {
+      this.userName = this.modelNameValue
+      this.modelNameValue = ''
+      this.placeHolder = 'Leave a Comment '+this.userName+' ...'
+      this.userNameEntered = true
+    },
+    getAllComments() {
+      axios.post('get-comments', {
+        message: this.message_id
+      })
+      .then(resp => {
+        this.comments = resp.data
+      })
     }
   },
-  mounted() {
+  beforeMount() {
     this.getPoopDetails()
+  },
+  mounted() {
+
   }
 }
 </script>
@@ -103,6 +138,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .general-status {
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
   margin: 30px;
@@ -164,6 +200,38 @@ em b{
 
 .like-comment-box input[type="image"] {
   max-height: 30px;
+}
+
+.userInput {
+  width: 30%;
+  padding: 10px;
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.comment {
+  background: rgb(229, 236, 255);
+  border-radius: 5px;
+  padding: 6px;
+  width: 60%;
+  margin: 0 0 13px 0;
+}
+
+.name {
+  font-size: 14px;
+  color: rgb(35, 61, 125)
+}
+.message {
+  font-size: 18px;
+}
+
+.comment-btn{
+  padding: 7px;
+  font-size: 15px;
+  background: #7F94CD;
+  color: white;
+  width: 20%;
+  margin: 0;
 }
 
 /* mobile styles */

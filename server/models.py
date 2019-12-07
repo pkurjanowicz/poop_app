@@ -10,6 +10,7 @@ class Messages(db.Model):
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(600),nullable=False)
     commenter_name = db.Column(db.String(600),nullable=False)
     comment_time = db.Column(db.String(600),nullable=False)
     comment_likes = db.Column(db.Integer)
