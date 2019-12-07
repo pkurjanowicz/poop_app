@@ -38,11 +38,12 @@ def submit_comment():
     commenter_name = request.json['name']
     comment_time = datetime.utcnow()
     comment_message = request.json['message']
-    if commenter_name == '':
-        commenter_name = 'Anonymous'
-    new_comment = Comments(comment=comment,commenter_name=commenter_name, comment_time=comment_time, comment_message=comment_message)
-    db.session.add(new_comment)
-    db.session.commit()
+    if comment != '':
+        if commenter_name == '':
+            commenter_name = 'Anonymous'
+        new_comment = Comments(comment=comment,commenter_name=commenter_name, comment_time=comment_time, comment_message=comment_message)
+        db.session.add(new_comment)
+        db.session.commit()
     return jsonify(success=True)
 
 @social_api.route('/get-comments', methods=['POST'])
