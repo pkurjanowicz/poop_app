@@ -107,7 +107,6 @@ export default {
         message: this.message_id
       })
       .then(resp => {
-        console.log(resp)
         this.comment = ''
         this.getAllComments()
       })
