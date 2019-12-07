@@ -18,6 +18,9 @@
           <span><input type='image' :src='like_btn' @click='like_post()'/></span>
         </div>
         <hr>
+        <div class='little-message-box'>
+          <p class='little-message'>Press enter or return to submit message and username</p>
+        </div>
         <p><button v-if='displayLoginBtn' @click='commentLogin'>Login to Comment</button></p>
         <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
         <div class='comments-box'>
@@ -27,6 +30,7 @@
         </div>
         <div class='commit-submit'>
         <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
+        
         </div>
       </div>
   </div>
@@ -203,7 +207,7 @@ em b{
 }
 
 .userInput {
-  width: 30%;
+  width: 80%;
   padding: 10px;
   font-size: 15px;
   margin: 10px 0;
@@ -232,6 +236,15 @@ em b{
   color: white;
   width: 20%;
   margin: 0;
+}
+.little-message {
+  font-size: 10px;
+  background-color: yellow;
+  width:270px;
+}
+.little-message-box {
+  width:100%;
+  display:flex;
 }
 
 /* mobile styles */
