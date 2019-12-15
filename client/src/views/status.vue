@@ -35,21 +35,11 @@
           </div>
         </div>
       </div>
-      <!-- <topRated 
-        class='topRated'
-        :poops='poop'
-        /> -->
-      <Slide class='mobile-navbar'>
-        <a id="home" href="/"><span>Home</span></a>
-        <a id="home" href="/toprated"><span>Liked Poops</span></a>
-      </Slide>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-// import topRated from '../components/topRated.vue';
-import { Slide } from 'vue-burger-menu' 
 
 export default {
   name: 'status',
@@ -72,13 +62,10 @@ export default {
         placeHolder: 'Leave a Comment...',
         userNameEntered: false,
         comments: '',
-        // poop: 'this is a message',
         nothing: '',
       }
     },
     components: {
-      // topRated,
-      Slide
     },
     methods: {
     getPoopDetails() {
@@ -159,14 +146,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.main-container {
-  display: flex;
-  flex-direction: row;
-  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-.topRated {
-  margin: 30px;
-}
 
 .general-status {
   display: flex;
@@ -181,7 +160,6 @@ em b{
 }
 .rating {
   box-shadow: 5px 10px 8px 10px #888888;
-  width: 50%;
   padding: 1% 3% 1% 3%;
 }
 

@@ -1,21 +1,25 @@
 <template>
   <div id="app">
-    <!-- <status/> -->
+    <navBar/>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import status from './components/status.vue'
+import navBar from './components/navBar.vue'
 
 export default {
   name: 'app',
   components: {
-    // status
+    navBar,
   }
 }
 </script>
 
 <style>
-
+.main-container {
+  display: flex;
+  flex-direction: row;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 </style>

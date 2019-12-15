@@ -4,6 +4,7 @@ from db_instance import db
 import psycopg2
 from smsAPI import sms_api
 from socialAPI import social_api
+from statusAPI import status_api
 
 # creats the correct path for the db file
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -24,6 +25,7 @@ def create_app():
     app.config['SQLALCHEMY_ECHO'] = True
     app.register_blueprint(sms_api)
     app.register_blueprint(social_api)
+    app.register_blueprint(status_api)
     db.init_app(app)
     return app
 

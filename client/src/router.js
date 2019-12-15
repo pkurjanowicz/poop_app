@@ -18,6 +18,18 @@ const routerOptions = [
       title: 'topRated',
       },
     },
+    { path: '/shant', 
+    component: 'shant', 
+    props: {
+      title: 'shant',
+      },
+    },
+    { path: '/poopstreak', 
+    component: 'poopStreak', 
+    props: {
+      title: 'poopStreak',
+      },
+    },
 ]
 /* this variable actually maps the 
 route to the component in the views folder*/
