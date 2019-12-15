@@ -1,10 +1,35 @@
 from models import Messages, Comments
 from db_instance import db
 from flask import Flask, request, render_template, Blueprint, jsonify
+from datetime import date
+import datetime
 
 status_api = Blueprint('status_api', __name__)
 
-@status_api.route('/get-top-liked', methods=['GET'])
+def find_start_end_dates(dates):
+    current_streak = 0
+    if str(datetime.datetime.today().strftime ('%m-%d-%Y')) == str(dates[-1:][0]):
+        start_date = dates[0]
+        transpose_start_date = start_date.split('-')
+        start_date = datetime.datetime(int(transpose_start_date[2]), int(transpose_start_date[0]), int(transpose_start_date[1]))
+        next_day = ''
+        for date in dates:
+            transpose_date = date.split('-')
+            date = datetime.datetime(int(transpose_date[2]), int(transpose_date[0]), int(transpose_date[1]))
+            if next_day == '':
+                next_day = date + datetime.timedelta(days=1)
+            if date == next_day:
+                next_date = date + datetime.timedelta(days=1)
+                current_streak += 1
+                next_day = next_date
+            elif date != next_day:
+                next_date = date + datetime.timedelta(days=1)
+                current_streak = 0
+                next_day = next_date
+    return current_streak
+
+
+@status_api.route('/get-top-liked', methods=['GET']) #this is for the topRated.vue page
 def get_top_liked():
     messages = Messages.query.all()
     list_of_dicts = []
@@ -24,3 +49,14 @@ def get_top_liked():
             'likes': message.poop_likes})
     list_of_dicts_sorted = sorted(list_of_dicts, key = lambda i: i['likes'])[-5:][::-1] #only returns the last 5 items in reverse order
     return jsonify(list_of_dicts_sorted)
+
+@status_api.route('/streak', methods=['GET']) #this is for the poopStreak.vue page
+def streak():
+    streak_counter = 0
+    poop_dates = []
+    messages = Messages.query.all()
+    dates = [message.poop_date for message in messages]
+    # dates_sorted = sorted(dates, key = lambda i: i['id'])
+    streak = find_start_end_dates(dates)
+    return jsonify(streak=streak)
+        

@@ -2,18 +2,36 @@
     <div class='main-container'>
         <div class="poop-streak">
             <h1>Poop Streak</h1>
-                <p>Coming Soon...</p>
+                <p>Days pooped in a row: {{streak}}</p>
         </div>
     </div>
 </template>
 
 
 <script>
+import axios from "axios";
+
 export default {
     name: 'topRated',
-    props: ['poops'],
+    data() {
+      return {
+        streak: '',
+      }
+    },
+    methods: {
+      getStreak() {
+        axios.get('streak')
+        .then(resp => {
+          this.streak = resp.data.streak
+        })
+      }
+    },
+    mounted() {
+      this.getStreak()
+    }
 }
 </script>
+
 
 <style scoped>
 .poop-streak {
