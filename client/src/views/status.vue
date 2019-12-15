@@ -35,20 +35,20 @@
           </div>
         </div>
       </div>
-      <topRated 
+      <!-- <topRated 
         class='topRated'
         :poops='poop'
-        />
+        /> -->
       <Slide class='mobile-navbar'>
         <a id="home" href="/"><span>Home</span></a>
-        <a id="home" href="/upload"><span>Liked Poops</span></a>
+        <a id="home" href="/toprated"><span>Liked Poops</span></a>
       </Slide>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import topRated from '../components/topRated.vue';
+// import topRated from '../components/topRated.vue';
 import { Slide } from 'vue-burger-menu' 
 
 export default {
@@ -72,12 +72,12 @@ export default {
         placeHolder: 'Leave a Comment...',
         userNameEntered: false,
         comments: '',
-        poop: 'this is a message',
+        // poop: 'this is a message',
         nothing: '',
       }
     },
     components: {
-      topRated,
+      // topRated,
       Slide
     },
     methods: {

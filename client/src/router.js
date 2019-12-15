@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
-import axios from 'axios';
 
 /* this is creating all router paths. When a user lands on the path
 vue router will load component(this corresponds with the file names 
@@ -13,13 +12,19 @@ const routerOptions = [
       title: 'status',
       },
     },
+    { path: '/toprated', 
+    component: 'topRated', 
+    props: {
+      title: 'topRated',
+      },
+    },
 ]
 /* this variable actually maps the 
 route to the component in the views folder*/
 const routes = routerOptions.map(route => {
   return {
     ...route,
-    component: () => import(`@/components/${route.component}.vue`)
+    component: () => import(`@/views/${route.component}.vue`)
   }
 })
 Vue.use(VueRouter)
