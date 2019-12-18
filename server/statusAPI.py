@@ -3,13 +3,16 @@ from db_instance import db
 from flask import Flask, request, render_template, Blueprint, jsonify
 from datetime import date
 import datetime
+from pytz import timezone
 
 status_api = Blueprint('status_api', __name__)
 
 #helper function, counts the poop streak
 def find_start_end_dates(dates):
     current_streak = 0
-    if str(datetime.datetime.today().strftime ('%m-%d-%Y')) == str(dates[-1:][0]):
+    date = datetime.datetime.today()
+    date_pacific = date.astimezone(timezone('US/Pacific'))
+    if str( date_pacific.strftime ('%m-%d-%Y') ) == str(dates[-1:][0]):
         start_date = dates[0]
         transpose_start_date = start_date.split('-')
         start_date = datetime.datetime(int(transpose_start_date[2]), int(transpose_start_date[0]), int(transpose_start_date[1]))
