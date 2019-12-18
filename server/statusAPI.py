@@ -6,6 +6,7 @@ import datetime
 
 status_api = Blueprint('status_api', __name__)
 
+#helper function, counts the poop streak
 def find_start_end_dates(dates):
     current_streak = 0
     if str(datetime.datetime.today().strftime ('%m-%d-%Y')) == str(dates[-1:][0]):
@@ -52,11 +53,12 @@ def get_top_liked():
 
 @status_api.route('/streak', methods=['GET']) #this is for the poopStreak.vue page
 def streak():
-    streak_counter = 0
-    poop_dates = []
     messages = Messages.query.all()
-    dates = [message.poop_date for message in messages]
-    # dates_sorted = sorted(dates, key = lambda i: i['id'])
-    streak = find_start_end_dates(dates)
+    dates = [{"id": message.id, "date": message.poop_date} for message in messages]
+    dates_sorted = sorted(dates, key = lambda i: i['id'])
+    dates = [date['date'] for date in dates_sorted]
+    dates_list = []
+    [dates_list.append(x) for x in dates if x not in dates_list] 
+    streak = find_start_end_dates(dates_list)
     return jsonify(streak=streak)
         
