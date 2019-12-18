@@ -19,11 +19,9 @@
             <span><input type='image' :src='like_btn' @click='like_post()'/></span>
           </div>
           <hr>
-          <div class='little-message-box'>
-            <p class='little-message'>Press enter or return to submit message and username</p>
-          </div>
-          <p><button v-if='displayLoginBtn' @click='commentLogin'>Login to Comment</button></p>
+          <p><button v-if='displayLoginBtn' @click='commentLogin'>Input Your Name</button></p>
           <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
+          <button class="form-btn" v-if='displayLoginBtn == false && userNameEntered == false' @click='enterUserName'>Submit Username</button>
           <div class='comments-box'>
             <div class='comment' v-for='(comment, index) in comments' :key='index'>
               <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
@@ -31,7 +29,7 @@
           </div>
           <div class='commit-submit'>
           <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
-          
+          <button class="form-btn" @click='submitComment'>Submit</button>
           </div>
         </div>
       </div>
@@ -122,9 +120,13 @@ export default {
     },
     enterUserName() {
       this.userName = this.modelNameValue
+      if (this.modelNameValue == '') {
+        this.userNameEntered = false;
+      } else {
+        this.userNameEntered = true;
+      }
       this.modelNameValue = ''
       this.placeHolder = 'Leave a Comment '+this.userName+' ...'
-      this.userNameEntered = true
     },
     getAllComments() {
       axios.post('get-comments', {
@@ -253,6 +255,10 @@ em b{
 
 .mobile-navbar {
     display:none;
+}
+
+.form-btn {
+  margin: 10px 0 20px;
 }
 
 /* mobile styles */
