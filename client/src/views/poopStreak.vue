@@ -2,7 +2,16 @@
     <div class='main-container'>
         <div class="poop-streak">
             <h1>Poop Streak</h1>
-                <p>Days pooped in a row: {{streak}}</p>
+                <p>Days pooped in a row: <b>{{streak}}</b></p>
+                <p> Most Poopy Day: <b>{{most_poops_date}}</b></p>
+                <p>Messages from that fateful day...</p>
+                <span v-for='(poop, index) in most_poops' :key='index'>
+                    <div class='poop-box'>
+                    <p>Likes: {{poop.likes}}</p>
+                    <p>Message: {{poop.message}}</p>
+                    <p>Rating: {{poop.rating}}</p>
+                    </div>
+                  </span>
         </div>
     </div>
 </template>
@@ -16,6 +25,8 @@ export default {
     data() {
       return {
         streak: '',
+        most_poops: '',
+        most_poops_date: '',
       }
     },
     methods: {
@@ -24,10 +35,18 @@ export default {
         .then(resp => {
           this.streak = resp.data.streak
         })
+      },
+      getConsecutiveDays() {
+        axios.get('consecutive-days')
+        .then(resp => {
+          this.most_poops = resp.data
+          this.most_poops_date = resp.data[0].date
+        })
       }
     },
     mounted() {
       this.getStreak()
+      this.getConsecutiveDays()
     }
 }
 </script>
@@ -38,6 +57,19 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 30px;
+}
+
+.poop-box {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  background-color: #7E94CD;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+}
+.poop-box p {
+  margin: 1px;
 }
 
 @media only screen and (max-width: 450px) {

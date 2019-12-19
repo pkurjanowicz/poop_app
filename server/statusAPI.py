@@ -4,6 +4,7 @@ from flask import Flask, request, render_template, Blueprint, jsonify
 from datetime import date
 import datetime
 from pytz import timezone
+from collections import Counter
 
 status_api = Blueprint('status_api', __name__)
 
@@ -65,3 +66,31 @@ def streak():
     streak = find_start_end_dates(dates_list)
     return jsonify(streak=streak)
         
+
+@status_api.route('/consecutive-days', methods=['GET']) #this is for the poopStreak.vue page
+def consecutive_days():
+    messages = Messages.query.all()
+    list_of_dates = []
+    for message in messages:
+        list_of_dates.append(message.poop_date)
+    dates = list(Counter(list_of_dates).keys()) # equals to list(set(words))
+    counts = list(Counter(list_of_dates).values()) # counts the elements' frequency
+    max_pos = counts.index(max(counts))
+    most_poops_date = dates[max_pos]
+
+    list_of_dicts = []
+    for message in messages:
+        if message.poop_date == most_poops_date:
+            if message.poop_likes == None:
+                message.poop_likes = 0
+            list_of_dicts.append({'id':message.id, 
+                    'message': message.poop_message,
+                    'date': message.poop_date, 
+                    'rating': message.poop_rating, 
+                    'likes': message.poop_likes})
+
+    return jsonify(list_of_dicts)
+
+    ## possibly I can create a class that will take in a count of the new instance of each date
+
+    # class Date:
