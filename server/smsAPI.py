@@ -5,6 +5,7 @@ from models import Messages
 from db_instance import db
 import pytz
 from pytz import timezone
+from emailAPI import send_notifications
 
 sms_api = Blueprint('sms_api', __name__)
 
@@ -34,7 +35,7 @@ def sms_ahoy_reply():
     number = request.args.get('From')
     body = request.args.get('Body')
     rating = request.args.get('poop_rating')
-    if rating > '5':
+    if rating != '1' or rating != '2' or rating != '3' or rating != '4' or rating != '5':
         rating = '5'
     if verify_shant(number):
         date_format='%m-%d-%Y'
@@ -44,31 +45,10 @@ def sms_ahoy_reply():
         new_poop = Messages(pooper_name='Shant',poop_date=date_today, poop_message=body, poop_rating=rating)
         db.session.add(new_poop)
         db.session.commit()
+        send_notifications(body)
+        print('Success!!!!')
         return 'Success'
     return 'Falure'
-
-    """
-    RESPONSE DATA EXAMPLE(QUERY STRING)
-    ?ToCountry=US
-    &ToState=AL
-    &SmsMessageSid=SMc5c48883a3902d997b64e39dca6bd5c9
-    &NumMedia=0
-    &ToCity=TUSCALOOSA
-    &FromZip=06484
-    &SmsSid=SMc5c48883a3902d997b64e39dca6bd5c9
-    &FromState=CT
-    &SmsStatus=received
-    &FromCity=DERBY
-    &Body=hey+there
-    &FromCountry=US
-    &To=%2B12052933232
-    &ToZip=35405
-    &NumSegments=1
-    &MessageSid=SMc5c48883a3902d997b64e39dca6bd5c9
-    &AccountSid=ACd11feb6ef2a175264fd6e40fc62ad19d
-    &From=%2B12032312081
-    &ApiVersion=2010-04-01
-    """
 
 @sms_api.route('/get-poops', methods=['GET'])
 def render_app():
@@ -88,5 +68,3 @@ def render_app():
             'poop_rating': get_poop()['rating'],
             'poop_id': get_poop()['id']
         })
-
-

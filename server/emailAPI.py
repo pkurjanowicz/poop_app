@@ -5,11 +5,13 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
+from sqlalchemy.exc import IntegrityError
+
 
 
 email_api = Blueprint('email_api', __name__)
-# gmail_user = 'pkurjanowicz10@gmail.com'
-# gmail_password = os.environ["GMAIL_PASS"]
+gmail_user = os.environ["GMAIL_USERNAME"]
+gmail_password = os.environ["GMAIL_PASS"]
 
 @email_api.route('/register-notification', methods=['POST'])
 def register_notification():
@@ -20,48 +22,49 @@ def register_notification():
     db.session.commit()
     return jsonify(success=True)
 
-# @email_api.route('/sendnotifications', methods=['POST'])
-# def send_notifications():
-#     message_id = request.json['message_id']
-#     if emails != '':
-#         for email in emails:
-#             # Add to DB
-#             new_invite = Invites(invitee_email=email,event_id=event_id)
-#             db.session.add(new_invite)
-#             db.session.commit()
-#             #send emails
-#             msg = MIMEMultipart()
-#             msg['From'] = gmail_user
-#             msg['To'] = email
-#             msg['Subject'] = 'Please accept this invite to my event!'
-#             # Create the body of the message (a plain-text and an HTML version).
-#             # text = "Hi!\nHow are you?\nHere is the link you wanted:\nhttps://www.python.org"
-#             html = """\
-#             <html>
-#             <head></head>
-#             <body>
-#                 <p>Hi!<br>
-#                 How are you?<br>
-#                 <a href='http://127.0.0.1:5000/response?event_id={}&email={}&response=True'><button>Click here to accept</button></a>
-#                 <button>Click here to reject</button>
-#                 </p>
-#             </body>
-#             </html>
-#             """.format(event_id,email)
+@email_api.route('/unsubscribe', methods=['GET'])
+def unsubscribe():
+    email = request.args.get('email')
+    to_delete_email = Notifications.query.filter_by(email=email).first()
+    if to_delete_email != None:
+        db.session.delete(to_delete_email)
+        db.session.commit()
+    else:
+        return '<h1> You are already unsubscribed!</h1>'
+    return '<h1>Thanks for successfully unsubscribing!</h1>'
 
-#             # Record the MIME types of both parts - text/plain and text/html.
-#             # part1 = MIMEText(text, 'plain')
-#             part2 = MIMEText(html, 'html')
+def send_notifications(poop_message):
+    #get all emails
+    emails = Notifications.query.all()
+    emails_list = [email.email for email in emails]
+    for email in emails_list:
+        #send emails
+        msg = MIMEMultipart()
+        msg['From'] = gmail_user
+        msg['To'] = email
+        msg['Subject'] = 'Shant just Shatted!'
+        # Create the body of the message (a plain-text and an HTML version).
+        html = """\
+        <html>
+        <head></head>
+        <body>
+            <p>Hello loyal poop subscriber!</p>
+            <p>Guess what!!!, Shant just sharted, here is his message:</p>
+            {}<br>
+            <p>Have a very poopy day!</p>
+            <p>Sincerely,</p>
+            <p>The Poop Team</p><br><br><br>
+            <span><a href='http://www.didshantpoop.com/unsubscribe?email={}'>Click here to unsubscribe</a></span>
+        </body>
+        </html>
+        """.format(poop_message,email)
 
-#             # Attach parts into message container.
-#             # According to RFC 2046, the last part of a multipart message, in this case
-#             # the HTML message, is best and preferred.
-#             # msg.attach(part1)
-#             msg.attach(part2)
-#             server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-#             server.ehlo()
-#             server.login(gmail_user, gmail_password)
-#             server.sendmail(gmail_user,email,msg.as_string())
-#             server.close()
-#             print('Success!')
-#         return jsonify(success=True)
+        part2 = MIMEText(html, 'html')
+
+        msg.attach(part2)
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(gmail_user, gmail_password)
+        server.sendmail(gmail_user,email,msg.as_string())
+        server.close()
+    return "Success"
