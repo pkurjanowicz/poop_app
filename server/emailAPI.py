@@ -54,8 +54,7 @@ def send_notifications(poop_message):
         <body>
             <p>Hi {},</p>
             <p>Guess what!!!, Shant just sharted, here is his message:</p>
-            {}<br>
-            <p>Have a very poopy day!</p>
+            <p><em>"{}"</em></p>
             <p>Sincerely,</p>
             <p>The Poop Team</p><br><br><br>
             <span><a href='http://www.didshantpoop.com/unsubscribe?email={}'>Click here to unsubscribe</a></span>
