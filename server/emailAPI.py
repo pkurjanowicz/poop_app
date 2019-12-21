@@ -17,10 +17,13 @@ gmail_password = os.environ["GMAIL_PASS"]
 def register_notification():
     email = request.json['email']
     name = request.json['name']
-    add_email = Notifications(name=name,email=email)
-    db.session.add(add_email)
-    db.session.commit()
-    return jsonify(success=True)
+    check_email = Notifications.query.filter_by(email=email).first()
+    if check_email == None:
+        add_email = Notifications(name=name,email=email)
+        db.session.add(add_email)
+        db.session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False)
 
 @email_api.route('/unsubscribe', methods=['GET'])
 def unsubscribe():
@@ -39,6 +42,7 @@ def send_notifications(poop_message):
     emails_list = [email.email for email in emails]
     for email in emails_list:
         #send emails
+        name = Notifications.query.filter_by(email=email).first().name
         msg = MIMEMultipart()
         msg['From'] = gmail_user
         msg['To'] = email
@@ -48,7 +52,7 @@ def send_notifications(poop_message):
         <html>
         <head></head>
         <body>
-            <p>Hello loyal poop subscriber!</p>
+            <p>Hi {},</p>
             <p>Guess what!!!, Shant just sharted, here is his message:</p>
             {}<br>
             <p>Have a very poopy day!</p>
@@ -57,7 +61,7 @@ def send_notifications(poop_message):
             <span><a href='http://www.didshantpoop.com/unsubscribe?email={}'>Click here to unsubscribe</a></span>
         </body>
         </html>
-        """.format(poop_message,email)
+        """.format(name,poop_message,email)
 
         part2 = MIMEText(html, 'html')
 

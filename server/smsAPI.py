@@ -46,7 +46,6 @@ def sms_ahoy_reply():
         db.session.add(new_poop)
         db.session.commit()
         send_notifications(body)
-        print('Success!!!!')
         return 'Success'
     return 'Falure'
 
