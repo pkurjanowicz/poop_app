@@ -14,9 +14,14 @@
             <img :src='num_likes'/>
             <span>{{likes}}</span>
           </div>
+          <subscribeModal 
+          v-if='modalView'
+          @close='modalClose()'
+          />
           <hr>
           <div class="like-comment-box">
             <span><input type='image' :src='like_btn' @click='like_post()'/></span>
+            <span><button @click='openModal()'>Subscribe</button></span>
           </div>
           <hr>
           <p><button v-if='displayLoginBtn' @click='commentLogin'>Input Your Name</button></p>
@@ -38,6 +43,7 @@
 
 <script>
 import axios from "axios";
+import subscribeModal from '../components/subscribeModal.vue'
 
 export default {
   name: 'status',
@@ -61,11 +67,19 @@ export default {
         userNameEntered: false,
         comments: '',
         nothing: '',
+        modalView: false,
       }
     },
     components: {
+      subscribeModal
     },
     methods: {
+    openModal() {
+      this.modalView=true
+    },
+    modalClose() {
+      this.modalView=false
+    },
     getPoopDetails() {
       axios.get('get-poops')
       .then(resp => {
@@ -149,6 +163,27 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.centeredModal{
+    position: absolute;
+    background: #fff;
+    z-index: 100;
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+    top: 25%;
+  }
+  /* .modal {
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 5%;
+    height: 100%;
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.5);
+    box-shadow: 0 0 5px rgba(0,0,0,.5);
+} */
+
 .general-status {
   display: flex;
   flex-direction: column;
@@ -159,10 +194,6 @@ export default {
 }
 em b{
   color: rgb(152, 0, 0);
-}
-.rating {
-  box-shadow: 5px 10px 8px 10px #888888;
-  padding: 1% 3% 1% 3%;
 }
 
 .comments-box {

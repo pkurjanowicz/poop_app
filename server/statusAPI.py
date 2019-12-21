@@ -90,7 +90,3 @@ def consecutive_days():
                     'likes': message.poop_likes})
 
     return jsonify(list_of_dicts)
-
-    ## possibly I can create a class that will take in a count of the new instance of each date
-
-    # class Date:

@@ -16,4 +16,10 @@ class Comments(db.Model):
     comment_likes = db.Column(db.Integer)
     comment_message = db.Column(db.Integer, db.ForeignKey('messages.id'),
         nullable=False)
+
+
+class Notifications(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(600),nullable=False)
+    email = db.Column(db.String(600),nullable=False)
     
