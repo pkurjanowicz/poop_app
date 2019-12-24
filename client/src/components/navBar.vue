@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='navbar-backdrop' @click='isOpen=false'>
         <div class="navbar">
             <!-- router-link is actually linked to the router.js file -->
             <router-link to="/"><button class='navbar-btn'>Home</button></router-link>
@@ -15,6 +15,7 @@
         </Slide> -->
         <Slide class='mobile-navbar'
           disableOutsideClick
+          :isOpen='isOpen'
         >
             <a @click='toggleShantSubMenu' id="home">
               <span>Shant</span>
@@ -58,7 +59,8 @@ export default {
     data() {
       return {
         shantSubMenuVisibile: false,
-        profileSubMenuVisibile: false
+        profileSubMenuVisibile: false,
+        isOpen: false,
       }
     },
     methods: {
@@ -84,6 +86,14 @@ export default {
 
 a {
   cursor: pointer;
+}
+
+.navbar-backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .navbar {
@@ -114,9 +124,12 @@ a {
 }
 
 .mobile-navbar {
-    display:none;
+    display:block;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 
+.navbar {
+    display:none;
 }
 
 #sub-menu {
@@ -142,23 +155,23 @@ a {
 }
 
 
-@media only screen and (max-width: 450px) {
+/* @media only screen and (max-width: 450px) {
   .navbar {
     display:none;
     }
   .mobile-navbar {
     display:block;
     }
-  }
+  } */
   
   /* Tablet Styles */
-@media only screen and (min-width: 450px) and (max-width: 1025px) {
+/* @media only screen and (min-width: 450px) and (max-width: 1025px) {
   .navbar {
     display:none;
     }
   .mobile-navbar {
     display:block;
     }
-  }
+  } */
 
 </style>

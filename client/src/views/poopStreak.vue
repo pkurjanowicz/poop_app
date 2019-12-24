@@ -56,7 +56,7 @@ export default {
 .poop-streak {
   display: flex;
   flex-direction: column;
-  margin: 30px;
+  margin: 70px 30px;
 }
 
 .poop-box {

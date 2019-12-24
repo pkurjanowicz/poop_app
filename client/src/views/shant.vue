@@ -30,7 +30,7 @@ export default {
 .shant {
   display: flex;
   flex-direction: column;
-  margin: 30px;
+  margin: 70px 30px;
 }
 
 .main-container {

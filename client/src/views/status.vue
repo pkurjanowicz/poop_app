@@ -187,7 +187,7 @@ export default {
 .general-status {
   display: flex;
   flex-direction: column;
-  margin: 30px;
+  margin: 70px 30px;
 }
 .general-status img{
   max-height: 30px;
