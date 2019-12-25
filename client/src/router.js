@@ -30,6 +30,42 @@ const routerOptions = [
       title: 'poopStreak',
       },
     },
+    { path: '/yourprofile', 
+    component: 'yourProfile', 
+    props: {
+      title: 'your-profile',
+      },
+    },
+    { path: '/yourstatus', 
+    component: 'yourStatus', 
+    props: {
+      title: 'your-status',
+      },
+    },
+    { path: '/yourpoopstreak', 
+    component: 'yourPoopStreak', 
+    props: {
+      title: 'your-poopstreak',
+      },
+    },
+    { path: '/yourtoprated', 
+    component: 'yourTopRated', 
+    props: {
+      title: 'your-top-rated',
+      },
+    },
+    { path: '/login', 
+    component: 'login', 
+    props: {
+      title: 'login',
+      },
+    },
+    { path: '/register', 
+    component: 'register', 
+    props: {
+      title: 'register',
+      },
+    },
 ]
 /* this variable actually maps the 
 route to the component in the views folder*/

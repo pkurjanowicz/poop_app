@@ -1,12 +1,11 @@
 <template>
-    <div class='navbar-backdrop' @click='isOpen=false'>
-        <div class="navbar">
-            <!-- router-link is actually linked to the router.js file -->
+    <div>
+        <!-- <div class="navbar">
             <router-link to="/"><button class='navbar-btn'>Home</button></router-link>
             <router-link to="/toprated"><button class='navbar-btn'>Liked Poops</button></router-link>
             <router-link to="/shant"><button class='navbar-btn'>Who is Shant?</button></router-link>
             <router-link to="/poopstreak"><button class='navbar-btn'>Poop Streak</button></router-link>
-        </div>
+        </div> -->
         <!-- <Slide class='mobile-navbar'>
             <a id="home" href="/"><span>Home</span></a>
             <a id="home" href="/toprated"><span>Liked Poops</span></a>
@@ -38,10 +37,10 @@
                 </div>
             </a>
               <div id="sub-menu-container" v-if='profileSubMenuVisibile'>
-                <a id="sub-menu" href="/"><span>Status</span></a>
-                <a id="sub-menu" href="/toprated"><span>Liked Poops</span></a>
-                <a id="sub-menu" href="/shant"><span>Profile</span></a>
-                <a id="sub-menu" href="/poopstreak"><span>Poop Streak</span></a>
+                <a id="sub-menu" href="/yourstatus"><span>Status</span></a>
+                <a id="sub-menu" href="/yourtoprated"><span>Liked Poops</span></a>
+                <a id="sub-menu" href="/yourprofile"><span>Profile</span></a>
+                <a id="sub-menu" href="/yourpoopstreak"><span>Poop Streak</span></a>
               </div>
         </Slide>
     </div>
@@ -60,7 +59,6 @@ export default {
       return {
         shantSubMenuVisibile: false,
         profileSubMenuVisibile: false,
-        isOpen: false,
       }
     },
     methods: {
@@ -86,14 +84,6 @@ export default {
 
 a {
   cursor: pointer;
-}
-
-.navbar-backdrop {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 
 .navbar {
