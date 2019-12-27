@@ -26,7 +26,7 @@
           <hr>
           <p><button v-if='displayLoginBtn' @click='commentLogin'>Input Your Name</button></p>
           <input class='userInput' v-if='displayLoginBtn == false && userNameEntered == false' type='text' placeholder="Input Username..." v-on:keyup.enter='enterUserName' v-model='modelNameValue'>
-          <button class="form-btn" v-if='displayLoginBtn == false && userNameEntered == false' @click='enterUserName'>Submit Username</button>
+          <p><button class="form-btn" v-if='displayLoginBtn == false && userNameEntered == false' @click='enterUserName'>Submit Username</button></p>
           <div class='comments-box'>
             <div class='comment' v-for='(comment, index) in comments' :key='index'>
               <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
@@ -34,7 +34,7 @@
           </div>
           <div class='commit-submit'>
           <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment' v-model='comment'>
-          <button class="form-btn" @click='submitComment'>Submit</button>
+          <p><button class="form-btn" @click='submitComment'>Submit</button></p>
           </div>
         </div>
       </div>
@@ -172,17 +172,6 @@ export default {
     margin-left: -200px;
     top: 25%;
   }
-  /* .modal {
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ccc;
-    padding: 5%;
-    height: 100%;
-    -moz-box-shadow: 0 0 5px rgba(0,0,0,.5);
-    -webkit-box-shadow: 0 0 5px rgba(0,0,0,.5);
-    box-shadow: 0 0 5px rgba(0,0,0,.5);
-} */
 
 .general-status {
   display: flex;
@@ -205,11 +194,10 @@ em b{
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
 }
 
 .like-comment-box span {
-  padding: 0 10%;
+  padding: 0 50px;
 }
 
 .poop-rating {
