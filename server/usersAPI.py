@@ -22,5 +22,8 @@ def nonloggedinsession():
 
 @users_api.route('/deletenonloggedinsession', methods=['GET'])
 def deletenonloggedinsession():
-    del session['notloggedin']
-    return jsonify(success=True)
+    try:
+        del session['notloggedin']
+        return jsonify(success=True)
+    except KeyError:
+        return jsonify(success=False)
