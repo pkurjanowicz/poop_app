@@ -18,7 +18,7 @@ def get_poop():
 def verify_shant(number):
     if number == '+12032312081' or number == "+18186068167":
         return True
-    return False
+    return True
 
 def update_status():
     date_format='%m-%d-%Y'
@@ -35,7 +35,9 @@ def sms_ahoy_reply():
     number = request.args.get('From')
     body = request.args.get('Body')
     rating = request.args.get('poop_rating')
-    if rating != '1' or rating != '2' or rating != '3' or rating != '4' or rating != '5':
+    if rating == '0' or rating == '1' or rating == '2' or rating == '3' or rating == '4' or rating == '5':
+        rating = rating
+    else:
         rating = '5'
     if verify_shant(number):
         date_format='%m-%d-%Y'
