@@ -14,14 +14,13 @@ def randomString():
 @users_api.route('/nonloggedinsession', methods=['GET'])
 def nonloggedinsession():
     if 'notloggedin' in session:
-        return jsonify(
-            in_session = True,
-            session = session['notloggedin']
-            )
+        return jsonify(session = session['notloggedin'])
     else:
         session['notloggedin'] = randomString()
         not_logged_in_session = session['notloggedin']
-        return jsonify(
-            in_session = False,
-            session=not_logged_in_session
-            )
+        return jsonify(session=not_logged_in_session)
+
+@users_api.route('/deletenonloggedinsession', methods=['GET'])
+def deletenonloggedinsession():
+    del session['notloggedin']
+    return jsonify(success=True)

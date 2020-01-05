@@ -153,16 +153,18 @@ export default {
     },
     setLikeSession() {
       axios.get('/nonloggedinsession')
-      .then(resp => {
-      console.log(resp)
-    })
+      .then()
+    },
+    deleteLikeSession() {
+      axios.get('/deletenonloggedinsession')
+      .then()
     }
   },
   beforeMount() {
     this.getPoopDetails()
   },
   mounted() {
-
+    this.deleteLikeSession()
   }
 }
 </script>
