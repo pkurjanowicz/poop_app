@@ -1,20 +1,7 @@
 <template>
     <div>
-        <!-- <div class="navbar">
-            <router-link to="/"><button class='navbar-btn'>Home</button></router-link>
-            <router-link to="/toprated"><button class='navbar-btn'>Liked Poops</button></router-link>
-            <router-link to="/shant"><button class='navbar-btn'>Who is Shant?</button></router-link>
-            <router-link to="/poopstreak"><button class='navbar-btn'>Poop Streak</button></router-link>
-        </div> -->
-        <!-- <Slide class='mobile-navbar'>
-            <a id="home" href="/"><span>Home</span></a>
-            <a id="home" href="/toprated"><span>Liked Poops</span></a>
-            <a id="home" href="/shant"><span>Who is Shant?</span></a>
-            <a id="home" href="/poopstreak"><span>Poop Streak</span></a>
-        </Slide> -->
         <Slide class='mobile-navbar'
           disableOutsideClick
-          :isOpen='isOpen'
         >
             <a @click='toggleShantSubMenu' id="home">
               <span>Shant</span>

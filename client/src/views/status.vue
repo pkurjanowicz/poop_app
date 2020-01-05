@@ -102,6 +102,7 @@ export default {
       })
       .then(resp => {
         this.likes = resp.data.likes
+        this.setLikeSession()
       })
     },
     getCurrentLikes() {
@@ -149,6 +150,12 @@ export default {
       .then(resp => {
         this.comments = resp.data
       })
+    },
+    setLikeSession() {
+      axios.get('/nonloggedinsession')
+      .then(resp => {
+      console.log(resp)
+    })
     }
   },
   beforeMount() {
