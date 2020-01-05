@@ -1,4 +1,5 @@
 from db_instance import db
+from hashutils import make_pw_hash, check_pw_hash
 
 class Messages(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,3 +24,11 @@ class Notifications(db.Model):
     name = db.Column(db.String(600),nullable=False)
     email = db.Column(db.String(600),nullable=False)
     
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(500))
+    pw_hash = db.Column(db.String(500))
+
+    def __init__(self, username, password):
+        self.username = username
+        self.pw_hash = make_pw_hash(password)

@@ -7,8 +7,19 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { isAuthenticated } from '../'
+
+
 export default {
-    name: "your-status"
+    name: "your-status",
+    mounted() {
+    isAuthenticated().then(data => {
+      if (data['session'] === false) {
+        this.$router.push('/login')
+      }
+    })
+  }
 }
 </script>
 
