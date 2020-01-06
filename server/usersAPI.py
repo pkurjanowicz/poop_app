@@ -74,3 +74,23 @@ def add_user():
 def logout():
         del session['user']
         return jsonify(success=True)
+
+@users_api.route('/addimage', methods=['POST', 'GET'])
+def add_image():
+        link = request.json["link"]
+        user_id = request.json["user_id"]
+        Users.query.filter_by(id=user_id).first().profile_image = link
+        db.session.commit()
+        return jsonify(success=True)
+
+@users_api.route('/getimgurkey', methods=['POST'])
+def getimgurkey():
+        user_id=request.json['user_id']
+        key = os.environ["IMGUR_SECRET"]
+        print(key)
+        try:
+                user = Users.query.filter_by(id=user_id).first() 
+                if user.id == session['user']:
+                        return jsonify(key=key)
+        except KeyError:
+                return jsonify(key=False)
