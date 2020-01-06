@@ -77,6 +77,7 @@ export default {
         console.log(response);
         this.$router.push('/login')
         this.isOpen = false
+        this.checksession = false
         })
         .catch(error => {
         console.log(error);

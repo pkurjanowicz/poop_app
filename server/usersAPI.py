@@ -4,7 +4,7 @@ import random
 import string
 from models import Users
 from hashutils import make_pw_hash, check_pw_hash
-from codes import checkcode
+import os
 
 
 users_api = Blueprint('users_api', __name__)
@@ -60,7 +60,7 @@ def add_user():
         username = request.json["username"]
         password = request.json["password"]
         code = request.json["code"]
-        if checkcode(code):
+        if code == os.environ["CODE"]:
                 new_user = Users(username=username,password=password)
                 db.session.add(new_user)
                 db.session.commit()
