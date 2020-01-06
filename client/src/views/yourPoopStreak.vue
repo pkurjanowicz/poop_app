@@ -7,8 +7,17 @@
 </template>
 
 <script>
+import { isAuthenticated } from '../views/helpers.js'
+
 export default {
-    name: "your-poopstreak"
+    name: "your-poopstreak",
+    mounted() {
+    isAuthenticated().then(data => {
+      if (data['session'] === false) {
+        this.$router.push('/login')
+      }
+    })
+  }
 }
 </script>
 

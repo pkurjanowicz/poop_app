@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request, session
 from db_instance import db
 import random
 import string
+from models import Users
+from hashutils import make_pw_hash, check_pw_hash
 
 
 users_api = Blueprint('users_api', __name__)
@@ -50,3 +52,21 @@ def check_session():
                 )
         else:
                 return jsonify(session = False)
+
+
+@users_api.route('/adduser', methods=['POST'])
+def add_user():
+        username = request.json["username"]
+        password = request.json["password"]
+        new_user = Users(username=username,password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        user = Users.query.filter_by(username=username).first()
+        session['user'] = user.id
+        usernamesession = session['user']
+        return jsonify(session=usernamesession)
+
+@users_api.route("/logout", methods=["GET"])
+def logout():
+        del session['user']
+        return jsonify(success=True)

@@ -1,7 +1,6 @@
 <template>
-    <div class='main-container'>
-        <div class="sub-container">
-            <h1>{{ title }}</h1>
+    <div class='login-box'>
+        <div class="login-form">
             <input @keyup.enter.exact='checkUser' type="text" v-model="username" placeholder="Username"/>
             <input @keyup.enter.exact='checkUser' type="password" v-model="password" placeholder="Password"/>
             <button @click="checkUser" >Login</button>
@@ -38,81 +37,43 @@ export default {
       this.username = '';
       this.password = '';
       /* this setTimeout() allows for the session to be set and then will redirect*/
-      setTimeout(() => this.$router.push({ path: '/'}), 300);
+      setTimeout(() => this.$router.push({ path: '/yourstatus'}), 300);
     }
   }
 }
 </script>
 
 <style scoped>
-.main-container {
-    margin: 70px 30px;
-}
 
 .login-box {
-    height: 420px;
-    width: 300px;
-    margin: 10% 35%;
-    display: flex;
-    justify-content: center;
-}
+      margin: 70px 30px;
+      height: 300px;
+      width: 300px;
+    }
 
 .login-form {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 15%;
-}
-
-.login-form h1 {
-    text-align: center;
-    margin: 0 0 30%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .login-form div {
     padding: 10% 0;
 }
 .login-form div a {
-    color: #DA3548;
-    font-size: 13px;
-}
-.login-form button {
-    margin: 10% 0 0 ;
-}
-/* Mobile Styles */
-@media only screen and (max-width: 450px) {
-    .login-box {
-      margin: 0;
-      height: 100%;
-      width: 100%;
+      font-size: 20px;
     }
-    .login-form {
-      box-shadow: none;
+button {
+      padding: 5px;
+      font-size: 20px;
     }
-  }
-  
-  /* Tablet Styles */
-   @media only screen and (min-width: 450px) and (max-width: 1025px) {
-    .login-box {
-      margin: 0;
-      height: 100%;
-      width: 100%;
+
+input[type=text], input[type=password] {
+      font-size: 20px;
+      margin: 10px 0
     }
-    .login-form {
-      box-shadow: none;
-    }
-    button {
-      padding: 30px;
-      font-size: 30px;
-    }
-    .login-form div a {
-      font-size: 30px;
-    }
-    input[type=text], input[type=password] {
-      font-size: 30px;
-    }
-    .login-form h1 {
-      font-size: 60px;
-    }
-  }
+
 </style>
 
 

@@ -8,7 +8,7 @@
 
 <script>
 import axios from 'axios';
-import { isAuthenticated } from '../'
+import { isAuthenticated } from '../views/helpers.js'
 
 
 export default {

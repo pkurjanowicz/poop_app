@@ -1,7 +1,9 @@
 <template>
     <div>
         <Slide class='mobile-navbar'
+          @openMenu="checkSessionValue"
           disableOutsideClick
+          :isOpen='isOpen'
         >
             <a @click='toggleShantSubMenu' id="home">
               <span>Shant</span>
@@ -28,14 +30,16 @@
                 <a id="sub-menu" href="/yourtoprated"><span>Liked Poops</span></a>
                 <a id="sub-menu" href="/yourprofile"><span>Profile</span></a>
                 <a id="sub-menu" href="/yourpoopstreak"><span>Poop Streak</span></a>
+                <a v-if='checksession' id="sub-menu" @click='logOut'><span>Logout</span></a>
               </div>
         </Slide>
     </div>
 </template>
 
 <script>
-
+import { isAuthenticated } from '../views/helpers'
 import { Slide } from 'vue-burger-menu'  
+import axios from 'axios'
 
 export default {
   name: 'navBar',
@@ -46,6 +50,8 @@ export default {
       return {
         shantSubMenuVisibile: false,
         profileSubMenuVisibile: false,
+        checksession: false,
+        isOpen: false,
       }
     },
     methods: {
@@ -54,6 +60,7 @@ export default {
           this.shantSubMenuVisibile = false
         } else {
           this.shantSubMenuVisibile = true
+          this.isOpen = true
         }
       },
       toggleProfileSubMenu() {
@@ -61,7 +68,26 @@ export default {
           this.profileSubMenuVisibile = false
         } else {
           this.profileSubMenuVisibile = true
+          this.isOpen = true
         }
+    },
+    logOut() {
+      axios.get('logout')
+      .then(response => {
+        console.log(response);
+        this.$router.push('/login')
+        this.isOpen = false
+        })
+        .catch(error => {
+        console.log(error);
+      });
+    },
+    checkSessionValue() {
+        isAuthenticated().then(data => {
+        if (data['session'] === true) {
+        this.checksession = true
+      }
+    })
     }
   }
 }
