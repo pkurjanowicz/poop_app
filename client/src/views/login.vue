@@ -4,7 +4,7 @@
             <input @keyup.enter.exact='checkUser' type="text" v-model="username" placeholder="Username"/>
             <input @keyup.enter.exact='checkUser' type="password" v-model="password" placeholder="Password"/>
             <button @click="checkUser" >Login</button>
-            <div><router-link to="/register">Register</router-link></div>
+            <div class ='sign-up-btn'>Don't have an account?<a href="/register"> Sign Up</a></div>
         </div>
     </div>
 </template>
@@ -61,17 +61,23 @@ export default {
 .login-form div {
     padding: 10% 0;
 }
-.login-form div a {
-      font-size: 20px;
-    }
+
+.sign-up-btn, a {
+  font-size: 13px;
+  text-decoration: none;
+}
 button {
-      padding: 5px;
-      font-size: 20px;
-    }
+  padding: 10px;
+  font-size: 20px;
+  background: #7F94CD;
+  color: white;
+  margin: 10px 0;
+}
 
 input[type=text], input[type=password] {
       font-size: 20px;
-      margin: 10px 0
+      margin: 10px 0;
+      padding: 10px;
     }
 
 </style>

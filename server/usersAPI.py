@@ -4,6 +4,7 @@ import random
 import string
 from models import Users
 from hashutils import make_pw_hash, check_pw_hash
+from codes import checkcode
 
 
 users_api = Blueprint('users_api', __name__)
@@ -58,13 +59,16 @@ def check_session():
 def add_user():
         username = request.json["username"]
         password = request.json["password"]
-        new_user = Users(username=username,password=password)
-        db.session.add(new_user)
-        db.session.commit()
-        user = Users.query.filter_by(username=username).first()
-        session['user'] = user.id
-        usernamesession = session['user']
-        return jsonify(session=usernamesession)
+        code = request.json["code"]
+        if checkcode(code):
+                new_user = Users(username=username,password=password)
+                db.session.add(new_user)
+                db.session.commit()
+                user = Users.query.filter_by(username=username).first()
+                session['user'] = user.id
+                usernamesession = session['user']
+                return jsonify(session=usernamesession)
+        return jsonify(success=False)
 
 @users_api.route("/logout", methods=["GET"])
 def logout():
