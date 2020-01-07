@@ -29,8 +29,9 @@ class Users(db.Model):
     username = db.Column(db.String(500))
     pw_hash = db.Column(db.String(500))
     profile_image = db.Column(db.String(120))
+    profile_bio = db.Column(db.String(1000))
 
-    def __init__(self, username, password,profile_image):
+    def __init__(self, username, password):
         self.username = username
         self.pw_hash = make_pw_hash(password)
-        self.profile_image = profile_image
+

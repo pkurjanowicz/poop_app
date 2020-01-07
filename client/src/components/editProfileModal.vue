@@ -7,10 +7,11 @@
                 Upload Image
                 <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/><br><br>
                 </label><br>
-                <p v-if="file">Selection Successful! Click submit to upload</p>
-                <button @click="addImage()">Submit</button><br>
-                <p v-if="successfulUpload">{{ successfulUpload }}<p>
-                <p style="display:none">{{userSessionID}}</p>
+                <p class='file-name' v-if="file">{{file.name}}</p>
+                <p>Update your profile</p>
+                <textarea cols="50" rows="15" v-model="profile"/>
+                <button @click="submit()">Submit</button><br>
+                <p v-if='successfulSave'>You have successfully updated your profile!</p>
             </div>
         </div>
     </div>
@@ -27,11 +28,18 @@ export default {
       file: '',
       successfulUpload: '',
       imgur_key: '',
+      profile: '',
+      successfulSave: false,
     }
   },
   methods: {
-    /* This function adds an image to imgur via the 
-    API and then adds that image w/ user session to database */
+    submit() {
+        if (this.file != '') {
+            this.addImage()
+        }
+        this.addProfile()
+        this.successfulSave = true
+    },
     addImage() {
       let formData = new FormData();
       formData.append('image', this.file);
@@ -67,6 +75,7 @@ export default {
     },
     close() {
         this.$emit('close')
+        this.successfulSave = false
     },
     getImgurKey() {
         axios.post('/getimgurkey', {
@@ -75,10 +84,28 @@ export default {
         .then(resp => {
             this.imgur_key = resp.data.key
         })
+    },
+    addProfile() {
+        axios.post('/updateprofile', {
+            user_id: this.userSessionID,
+            profile: this.profile
+        })
+        .then((resp) => {
+            this.profile = resp.data.profile
+        })
+    },
+    getProfile() {
+        axios.post('/getprofile', {
+            user_id: this.userSessionID
+        })
+        .then((resp) => {
+            this.profile = resp.data.profile
+        })
     }
   },
   mounted() {
     this.getImgurKey()
+    this.getProfile()
   }
 }
 </script>
@@ -102,8 +129,8 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    height: 300px;
-    width: 300px;
+    height: 600px;
+    width: 400px;
     padding:30px;
 }
 
@@ -137,5 +164,9 @@ button {
   background: #7F94CD;
   color: white;
   margin: 10px 0;
+}
+
+.file-name {
+    font-size:12px;
 }
 </style>

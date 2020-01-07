@@ -94,3 +94,17 @@ def getimgurkey():
                         return jsonify(key=key)
         except KeyError:
                 return jsonify(key=False)
+
+@users_api.route('/updateprofile', methods=['POST'])
+def updateprofile():
+        user_id = request.json["user_id"]
+        profile = request.json['profile']
+        profile_value = Users.query.filter_by(id=user_id).first().profile_bio = profile
+        db.session.commit()
+        return jsonify(profile=profile_value)
+
+@users_api.route('/getprofile', methods=['POST'])
+def getprofile():
+        user_id = request.json["user_id"]
+        profile_value = Users.query.filter_by(id=user_id).first().profile_bio
+        return jsonify(profile=profile_value)
