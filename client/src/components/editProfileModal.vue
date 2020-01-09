@@ -52,6 +52,7 @@ export default {
         this.successfulSave = true
     },
     addImage() {
+      this.isLoading = true
       let formData = new FormData();
       formData.append('image', this.file);
       axios.post('https://api.imgur.com/3/image', formData, {
@@ -61,7 +62,6 @@ export default {
           },
         })
         .then(response => {
-          this.isLoading = true
           axios.post('/addimage', {
               link: response.data.data.link,
               user_id: this.userSessionID
