@@ -13,9 +13,9 @@
                 </label><br>
                 <p class='file-name' v-if="file">{{file.name}}</p>
                 <p>Update your profile</p>
-                <textarea cols="50" rows="15" v-model="profile"/>
+                <textarea cols="50" rows="8" v-model="profile"/>
                 <button @click="submit()">Submit</button><br>
-                <p v-if='successfulSave'>You have successfully updated your profile!</p>
+                <p class='file-name' v-if='successfulSave'>You have successfully updated your profile!</p>
             </div>
         </div>
     </div>
@@ -49,7 +49,6 @@ export default {
             this.addImage()
         }
         this.addProfile()
-        this.successfulSave = true
     },
     addImage() {
       this.isLoading = true
@@ -69,6 +68,7 @@ export default {
             .then(() => {
               this.successfulUpload = 'Success!'
               this.isLoading = false
+              this.successfulSave = true
               this.file = ''
             })
         })
@@ -134,7 +134,7 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    height: 600px;
+    height: 500px;
     width: 400px;
     padding:30px;
 }
@@ -154,9 +154,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 12px 4px 12px;
+    padding: 16px 5px 2px 5px;
     cursor: pointer;
-    margin: 30px 0 0;
+    margin: 15px 0 0;
 }
 
 .upload {
@@ -178,5 +178,6 @@ button {
 
 .file-name {
     font-size:12px;
+    margin: 2px;
 }
 </style>
