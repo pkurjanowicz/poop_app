@@ -1,6 +1,9 @@
 <template>
     <div class="modal-backdrop">
         <div class='modal-box'>
+            <loading :active.sync="isLoading" 
+                :is-full-page="fullPage"
+            />
             <button class="x-out-button" @click='close'> X </button>
             <div class="upload">
                 <p>Update your profile image</p>
@@ -20,6 +23,8 @@
 
 <script>
 import axios from 'axios'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 export default {
     name:'editProfileModal',
@@ -31,8 +36,13 @@ export default {
       imgur_key: '',
       profile: '',
       successfulSave: false,
+      isLoading: false,
+      fullPage: true
     }
   },
+  components: {
+    Loading
+    },
   methods: {
     submit() {
         if (this.file != '') {
@@ -51,12 +61,14 @@ export default {
           },
         })
         .then(response => {
+          this.isLoading = true
           axios.post('/addimage', {
               link: response.data.data.link,
               user_id: this.userSessionID
             })
             .then(() => {
               this.successfulUpload = 'Success!'
+              this.isLoading = false
               this.file = ''
             })
         })
@@ -125,6 +137,11 @@ export default {
     height: 600px;
     width: 400px;
     padding:30px;
+}
+.modal-box-loading{
+    width:100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .x-out-button {
