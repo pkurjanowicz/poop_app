@@ -6,13 +6,13 @@
             />
             <button class="x-out-button" @click='close'> X </button>
             <div class="upload">
-                <p>Update your profile image</p>
+                <h4>Update your profile image</h4>
                 <label class="custom-file-upload">
-                Upload Image
+                <span>Upload Image</span>
                 <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/><br><br>
                 </label><br>
                 <p class='file-name' v-if="file">{{file.name}}</p>
-                <p>Update your profile</p>
+                <h4>Update your profile</h4>
                 <textarea cols="50" rows="8" v-model="profile"/>
                 <button @click="submit()">Submit</button><br>
                 <p class='file-name' v-if='successfulSave'>You have successfully updated your profile!</p>
@@ -150,13 +150,15 @@ export default {
 }
 
 .custom-file-upload {
-    border: 1px solid #ccc;
+    border: 2px solid gray;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 16px 5px 2px 5px;
+    padding: 1px 10px;
     cursor: pointer;
     margin: 15px 0 0;
+    border-radius: 8px;
+    color: gray;
 }
 
 .upload {
@@ -179,5 +181,9 @@ button {
 .file-name {
     font-size:12px;
     margin: 2px;
+}
+
+.custom-file-upload span {
+    font-size:12px;
 }
 </style>
