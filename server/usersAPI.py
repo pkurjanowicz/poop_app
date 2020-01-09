@@ -108,3 +108,9 @@ def getprofile():
         user_id = request.json["user_id"]
         profile_value = Users.query.filter_by(id=user_id).first().profile_bio
         return jsonify(profile=profile_value)
+
+@users_api.route('/getimagelink', methods=['POST'])
+def getimagelink():
+        user_id = request.json["user_id"]
+        image_value = Users.query.filter_by(id=user_id).first().profile_image
+        return jsonify(image=image_value)

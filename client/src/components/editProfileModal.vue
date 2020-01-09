@@ -3,6 +3,7 @@
         <div class='modal-box'>
             <button class="x-out-button" @click='close'> X </button>
             <div class="upload">
+                <p>Update your profile image</p>
                 <label class="custom-file-upload">
                 Upload Image
                 <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/><br><br>
@@ -54,19 +55,11 @@ export default {
               link: response.data.data.link,
               user_id: this.userSessionID
             })
-            .then(response => {
-              console.log(response);
+            .then(() => {
               this.successfulUpload = 'Success!'
               this.file = ''
             })
-            .catch(error => {
-              console.log(error);
-            });
-        console.log(response.data.data.link);
         })
-        .catch(error => {
-        console.log(error);
-      });
     },
     //this is bound to file input section in html
     handleFileUpload(){
@@ -159,11 +152,11 @@ input[type=file] {
     display:none;
 }
 button {
-  padding: 10px;
-  font-size: 20px;
+  padding: 8px;
+  font-size: 15px;
   background: #7F94CD;
   color: white;
-  margin: 10px 0;
+  margin: 20px 0 5px;
 }
 
 .file-name {
