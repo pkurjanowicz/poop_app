@@ -66,6 +66,12 @@ const routerOptions = [
       title: 'register',
       },
     },
+    { path: '/poopstream', 
+    component: 'poopStream', 
+    props: {
+      title: 'poop-stream',
+      },
+    },
 ]
 /* this variable actually maps the 
 route to the component in the views folder*/

@@ -5,6 +5,7 @@
           disableOutsideClick
           :isOpen='isOpen'
         >
+        <a href="/poopstream"><span>Home</span></a>
             <a @click='toggleShantSubMenu' id="home">
               <span>Shant</span>
                 <div class='plus-minus-container'>
@@ -73,15 +74,11 @@ export default {
     },
     logOut() {
       axios.get('logout')
-      .then(response => {
-        console.log(response);
+      .then(() => {
         this.$router.push('/login')
         this.isOpen = false
         this.checksession = false
         })
-        .catch(error => {
-        console.log(error);
-      });
     },
     checkSessionValue() {
         isAuthenticated().then(data => {

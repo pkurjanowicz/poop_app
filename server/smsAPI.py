@@ -15,6 +15,12 @@ def get_poop():
     poop_list_of_dicts_sorted = sorted(poop_list_of_dicts, key = lambda i: i['id'])
     return poop_list_of_dicts_sorted[-1]
 
+def get_all_poops():
+    poops = Messages.query.all()
+    poop_list_of_dicts=[{'id':poop.id, 'name': poop.pooper_name, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating, 'poop_likes': poop.poop_likes} for poop in poops ]
+    poop_list_of_dicts_sorted = sorted(poop_list_of_dicts, key = lambda i: -i['id'])
+    return poop_list_of_dicts_sorted
+
 def verify_shant(number):
     if number == '+12032312081' or number == "+18186068167":
         return True
@@ -69,3 +75,9 @@ def render_app():
             'poop_rating': get_poop()['rating'],
             'poop_id': get_poop()['id']
         })
+
+@sms_api.route('/get-all-poops', methods=['GET'])
+def render_poops():
+    all_poops = get_all_poops()
+    return_value = [{'name': poop['name'],'last_poop_date': poop['date'],'poop_message': poop['message'], 'poop_rating': poop['rating'],'poop_id': poop['id'], 'poop_likes': poop['poop_likes']} for poop in all_poops]
+    return jsonify(return_value)
