@@ -2,19 +2,16 @@
     <div class='main-container'>
         <div class="sub-container">
             <h1>Poop Stream</h1>
-            <span v-for='(poop, index) in allPoops' :key='index'>
+            <!-- {{allPoops}} -->
+            <span v-for='(poop) in allPoops' :key='poop.id'>
                 <div class='poop-box'>
                     <div class='message'>
                         <p><span class='name'>{{poop.name}}</span><br><span>{{poop.poop_message}}</span></p>
                         <span class='date'>{{poop.last_poop_date}}</span>
-                        <span class='poop-rating'>
-                            <span>Rating(out of 5):</span>
-                            <span class='no-display'>{{poopRating(poop.poop_rating)}}</span>
-                            <span v-for='(emoji, index) in poop_array' :key='index'><img :src='poop_emoji'/></span>
-                        </span>
                         <div class='num-of-likes'>
                             <img :src='num_likes'/>
-                            <span>{{poop.poop_likes}}</span>
+                            <span v-if='poop.poop_likes == null'>0</span>
+                            <span v-else>{{poop.poop_likes}}</span>
                         </div>
                         <subscribeModal 
                         v-if='modalView'
@@ -22,7 +19,7 @@
                         />
                         <hr>
                         <div class="like-comment-box">
-                            <span><input type='image' :src='like_btn' @click='like_post()'/></span>
+                            <span><input type='image' :src='like_btn' @click='like_post(poop.poop_message)'/></span>
                             <span><button @click='openModal()'>Subscribe</button></span>
                             <span><button @click='commentLogin()'>Comment</button></span>
                         </div>
@@ -37,6 +34,7 @@
 import { isAuthenticated } from '../views/helpers.js'
 import axios from 'axios'
 import subscribeModal from '../components/subscribeModal.vue'
+var Vue = require('vue');
 
 export default {
     name: "poop-stream",
@@ -47,7 +45,6 @@ export default {
             poop_emoji: require('@/assets/580b57fcd9996e24bc43c39c.png'),
             num_likes: require('@/assets/JD-22-512.png'),
             like_btn: require('@/assets/like_PNG90.png'),
-            poop_array: [],
             modalView: false,
         }
     },
@@ -61,21 +58,24 @@ export default {
                 this.allPoops = resp.data
             })
         },
-        poopRating(num) {
-            this.poop_array = []
-            for (let step = 0; step < Number(num); step++) {
-                this.poop_array.push('0')
-            }
-        },
         openModal() {
             this.modalView=true
         },
         modalClose() {
             this.modalView=false
         },
-        like_post() {
-            //need to pass in the post ID, query the DB and then add a like to that post only
-        },
+        like_post(message) {
+          axios.post('like-post-stream',{
+            post_message: message
+        })
+          .then(resp => {
+            this.getAllPoops()
+        })
+      },
+      setLikeSession() {
+        axios.get('/nonloggedinsession')
+        .then()
+      },
     },
     mounted() {
     this.getAllPoops()
@@ -100,12 +100,11 @@ export default {
 .poop-box {
   display: flex;
   flex-direction: column;
-  margin: 5px;
+  margin: 5px 30px 0 0;
   border-radius: 5px;
   padding: 10px;
   border: black solid 1px;
   max-width: 500px;
-  height: 200px;
 }
 .poop-box p {
   margin: 1px;
@@ -140,7 +139,7 @@ export default {
 }
 
 .like-comment-box span {
-  padding: 0 50px;
+  padding: 0 20px;
 }
 
 .like-comment-box button {

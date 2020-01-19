@@ -18,7 +18,6 @@ class Comments(db.Model):
     comment_message = db.Column(db.Integer, db.ForeignKey('messages.id'),
         nullable=False)
 
-
 class Notifications(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(600),nullable=False)
@@ -35,3 +34,14 @@ class Users(db.Model):
         self.username = username
         self.pw_hash = make_pw_hash(password)
 
+class Relational(db.Model): #this db is just to import a user ID and reference different things about it
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    subscribed_to = db.Column(db.Integer, db.ForeignKey('users.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+    poop_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
+
+class PhoneNumber(db.Model): #helper DB so I don't have to add another column to the users database
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    phone_number = db.Column(db.String(120))
