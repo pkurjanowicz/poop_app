@@ -1,6 +1,17 @@
 <template>
     <div class='main-container'>
         <div class="sub-container">
+          <p class='error' v-if='error'>{{error}}</p>
+          <button @click='inputNumberClick()'>Input your phone number</button>
+          <p v-if='openNumberInput == false && validSubmission'>Phone Number Updated!</p>
+          <div v-if='openNumberInput' class='phone-input'>
+            <vue-tel-input 
+              v-bind="bindProps"
+              placeholder='Phone Number...'
+              @onInput='onInput'
+            />
+            <button @click='submitNumber'>Submit</button>
+          </div>
           <button @click='openModal'>Edit Your Profile</button>
             <div class='profile-container'>
               <div class='profile-bio'>
@@ -28,6 +39,7 @@
 import { isAuthenticated } from '../views/helpers.js'
 import editProfileModal from '../components/editProfileModal'
 import axios from 'axios'
+import { VueTelInput } from 'vue-tel-input'
 
 export default {
     name: "your-profile",
@@ -37,10 +49,23 @@ export default {
         userSessionID: '',
         profileImage: '',
         profileBio: '',
+        openNumberInput: false,
+        error: '',
+        validSubmission: false,
+        phone: {
+          number: '',
+          isValid: false,
+        },
+        bindProps: { 
+          onlyCountries: ["US"],
+          defaultCountry: 'US',
+          validCharactersOnly: true,
+        }
       }
     },
     components: {
-      editProfileModal
+      editProfileModal,
+      VueTelInput,
     },
     methods: {
       openModal() {
@@ -66,6 +91,34 @@ export default {
         .then(resp => {
           this.profileBio = resp.data.profile
         })
+      },
+      inputNumberClick() {
+        if (this.openNumberInput == false) {
+          this.openNumberInput = true
+          this.validSubmission = false
+        } else {
+          this.openNumberInput = false
+        }
+      },
+      submitNumber() {
+        if (this.phone.isValid == true) {
+          axios.post('/update_number', {
+            number: this.phone.number.input,
+            user_id: this.userSessionID
+          })
+          .then(() => {
+            this.error = ''
+            this.validSubmission = true
+            this.openNumberInput = false
+          })
+        } else {
+          this.error = 'Invalid Number'
+        }
+      },
+      onInput({ number, isValid, country }) {
+      this.phone.number = number;
+      this.phone.isValid = isValid;
+      this.phone.country = country;
       }
     },
     mounted() {
@@ -83,6 +136,11 @@ export default {
 </script>
 
 <style scoped>
+
+.error {
+    color: red
+}
+
 .main-container {
     margin: 70px 30px;
 }
@@ -104,6 +162,34 @@ button {
   align-items: center;
   flex-direction: column;
   max-width: 700px;
+}
+.sub-container {
+  display: flex;
+  flex-direction: column;
+}
+.sub-container input[type='text'] {
+  width: 80%;
+  padding: 10px;
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.vue-tel-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.vti__input {
+  font-size: 15px;
+}
+
+.sub-container button {
+  padding: 7px;
+  font-size: 15px;
+  background: #7F94CD;
+  color: white;
 }
 
 </style>
