@@ -98,6 +98,7 @@ export default {
           this.validSubmission = false
         } else {
           this.openNumberInput = false
+          this.error = ''
         }
       },
       submitNumber() {
