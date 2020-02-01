@@ -206,7 +206,7 @@ em b{
 }
 
 .like-comment-box span {
-  padding: 0 50px;
+  padding: 0 20px;
 }
 
 .poop-rating {

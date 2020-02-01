@@ -15,8 +15,14 @@
           <button @click='openModal'>Edit Your Profile</button>
             <div class='profile-container'>
               <div class='profile-bio'>
-                <h3>Your Profile</h3>
+                <h3 v-if='current_number != null' class='current-number-parent'>Your Phone Number
+                <p class='current-number'>{{current_number}}</p>
+                </h3>
+                <h3 v-else class='current-number-parent' >Your Phone Number
+                <span class='current-number'>Please Input Your Number</span>
+                </h3>
                 <hr>
+                <h3>Your Profile</h3>
                 <p v-if='!profileBio'>Please enter a profile</p>
                 <p v-else style="white-space: pre-line">{{profileBio}}</p>
                 <hr>
@@ -52,6 +58,7 @@ export default {
         openNumberInput: false,
         error: '',
         validSubmission: false,
+        current_number: '',
         phone: {
           number: '',
           isValid: false,
@@ -111,6 +118,7 @@ export default {
             this.error = ''
             this.validSubmission = true
             this.openNumberInput = false
+            this.current_number = this.getPhoneNumber()
           })
         } else {
           this.error = 'Invalid Number'
@@ -120,6 +128,14 @@ export default {
       this.phone.number = number;
       this.phone.isValid = isValid;
       this.phone.country = country;
+      },
+      getPhoneNumber() {
+        axios.post('/get_number', {
+          user_id: this.userSessionID
+        })
+        .then(resp => {
+          this.current_number = resp.data.number
+        })
       }
     },
     mounted() {
@@ -130,6 +146,7 @@ export default {
         this.userSessionID = data['user']
         this.getProfileImage()
         this.getProfileBio()
+        this.getPhoneNumber()
       }
     })
   }
@@ -181,16 +198,23 @@ button {
   margin: 10px 0;
 }
 
-.phone-input {
+/* .phone-input {
   max-width: 40%;
-}
+} */
 
 .sub-container button {
   padding: 7px;
   font-size: 15px;
   background: #7F94CD;
   color: white;
-  max-width: 40%;
+}
+.current-number-parent {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 0 0;
+}
+.current-number {
+  font-size: 15px;
 }
 
 </style>
