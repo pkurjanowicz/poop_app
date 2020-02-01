@@ -176,14 +176,13 @@ button {
 }
 
 .vue-tel-input {
-  width: 80%;
   padding: 10px;
   font-size: 15px;
   margin: 10px 0;
 }
 
-.vti__input {
-  font-size: 15px;
+.phone-input {
+  max-width: 40%;
 }
 
 .sub-container button {
@@ -191,6 +190,7 @@ button {
   font-size: 15px;
   background: #7F94CD;
   color: white;
+  max-width: 40%;
 }
 
 </style>
