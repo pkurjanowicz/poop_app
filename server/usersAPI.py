@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, session
 from db_instance import db
 import random
 import string
-from models import Users
+from models import Users, Users_v2
 from hashutils import make_pw_hash, check_pw_hash
 import os
 
@@ -37,7 +37,7 @@ def check_user():
         session['user'] = ''
         username = request.json["username"]
         password = request.json["password"]
-        user = Users.query.filter_by(username=username).first()
+        user = Users_v2.query.filter_by(username=username).first()
         if check_pw_hash(password, user.pw_hash):
                 session['user'] = user.id
                 usernamesession = session['user']
@@ -59,12 +59,12 @@ def check_session():
 def add_user():
         username = request.json["username"]
         password = request.json["password"]
-        code = request.json["code"]
-        if code == os.environ["CODE"]:
-                new_user = Users(username=username,password=password)
+        check_if_user_exists = Users_v2.query.filter_by(username=username).first()
+        if check_if_user_exists == None:
+                new_user = Users_v2(username=username,password=password)
                 db.session.add(new_user)
                 db.session.commit()
-                user = Users.query.filter_by(username=username).first()
+                user = Users_v2.query.filter_by(username=username).first()
                 session['user'] = user.id
                 usernamesession = session['user']
                 return jsonify(session=usernamesession)
@@ -79,7 +79,7 @@ def logout():
 def add_image():
         link = request.json["link"]
         user_id = request.json["user_id"]
-        Users.query.filter_by(id=user_id).first().profile_image = link
+        Users_v2.query.filter_by(id=user_id).first().profile_image = link
         db.session.commit()
         return jsonify(success=True)
 
@@ -89,7 +89,7 @@ def getimgurkey():
         key = os.environ["IMGUR_SECRET"]
         print(key)
         try:
-                user = Users.query.filter_by(id=user_id).first() 
+                user = Users_v2.query.filter_by(id=user_id).first() 
                 if user.id == session['user']:
                         return jsonify(key=key)
         except KeyError:
@@ -99,18 +99,18 @@ def getimgurkey():
 def updateprofile():
         user_id = request.json["user_id"]
         profile = request.json['profile']
-        profile_value = Users.query.filter_by(id=user_id).first().profile_bio = profile
+        profile_value = Users_v2.query.filter_by(id=user_id).first().profile_bio = profile
         db.session.commit()
         return jsonify(profile=profile_value)
 
 @users_api.route('/getprofile', methods=['POST'])
 def getprofile():
         user_id = request.json["user_id"]
-        profile_value = Users.query.filter_by(id=user_id).first().profile_bio
+        profile_value = Users_v2.query.filter_by(id=user_id).first().profile_bio
         return jsonify(profile=profile_value)
 
 @users_api.route('/getimagelink', methods=['POST'])
 def getimagelink():
         user_id = request.json["user_id"]
-        image_value = Users.query.filter_by(id=user_id).first().profile_image
+        image_value = Users_v2.query.filter_by(id=user_id).first().profile_image
         return jsonify(image=image_value)

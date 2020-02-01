@@ -2,7 +2,11 @@
     <div class='main-container'>
         <div class="sub-container">
             <h1>Poop Stream</h1>
-            <!-- {{allPoops}} -->
+            <subscribeModal 
+              v-if='modalView'
+              @close='modalClose()'
+              :pooper_id='pooper_id'
+            />
             <span v-for='(poop) in allPoops' :key='poop.id'>
                 <div class='poop-box'>
                     <div class='message'>
@@ -13,14 +17,10 @@
                             <span v-if='poop.poop_likes == null'>0</span>
                             <span v-else>{{poop.poop_likes}}</span>
                         </div>
-                        <subscribeModal 
-                        v-if='modalView'
-                        @close='modalClose()'
-                        />
                         <hr>
                         <div class="like-comment-box">
                             <span><input type='image' :src='like_btn' @click='like_post(poop.poop_message)'/></span>
-                            <span><button @click='openModal()'>Subscribe</button></span>
+                            <span><button @click='openModal(poop.poop_id)'>Subscribe</button></span>
                             <span><button @click='commentLogin()'>Comment</button></span>
                         </div>
                     </div>
@@ -46,6 +46,7 @@ export default {
             num_likes: require('@/assets/JD-22-512.png'),
             like_btn: require('@/assets/like_PNG90.png'),
             modalView: false,
+            pooper_id: '',
         }
     },
     components: {
@@ -58,7 +59,8 @@ export default {
                 this.allPoops = resp.data
             })
         },
-        openModal() {
+        openModal(pooper_id) {
+            this.pooper_id = pooper_id
             this.modalView=true
         },
         modalClose() {
@@ -68,7 +70,7 @@ export default {
           axios.post('like-post-stream',{
             post_message: message
         })
-          .then(resp => {
+          .then(() => {
             this.getAllPoops()
         })
       },
@@ -100,7 +102,7 @@ export default {
 .poop-box {
   display: flex;
   flex-direction: column;
-  margin: 5px 30px 0 0;
+  margin: 5px 0 0 0;
   border-radius: 5px;
   padding: 10px;
   border: black solid 1px;
@@ -139,7 +141,7 @@ export default {
 }
 
 .like-comment-box span {
-  padding: 0 20px;
+  padding: 5px;
 }
 
 .like-comment-box button {

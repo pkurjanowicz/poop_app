@@ -8,7 +8,7 @@
                 </div>
                 <input type='text' placeholder="Enter Your Name..." v-model='name'/>
                 <input type='text' placeholder="Enter Your Email..." v-model='email'/>
-                <span class='submit-form'><button @click='checkForm'>Subscribe</button></span>
+                <span class='submit-form'><button @click='checkForm(pooper_id)'>Subscribe</button></span>
             </div>
         </div>
         <div class='subscribe-box' v-else>
@@ -26,6 +26,7 @@ import axios from "axios";
 
 export default {
     name: 'subscribeModal',
+    props: ['pooper_id'],
     data() {
         return {
             name: '',
@@ -35,7 +36,7 @@ export default {
         }
     },
     methods: {
-        checkForm(e) {
+        checkForm(pooper_id) {
             this.errors = [];
 
             if (!this.name) {
@@ -48,16 +49,16 @@ export default {
             }
 
             if (!this.errors.length) {
-                this.registerNotification()
+                this.registerNotification(pooper_id)
                 return true;
             }
 
-            e.preventDefault();
         },
-        registerNotification() {
+        registerNotification(pooper_id) {
             axios.post('register-notification', {
                 name: this.name,
                 email: this.email,
+                subscribed_to: pooper_id,
             })
             .then(resp => {
                 this.response = resp.data

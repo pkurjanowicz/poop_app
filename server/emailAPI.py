@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template
 from db_instance import db
-from models import Notifications, Messages
+from models import Notifications_v2, Messages, Notifications, Users, Users_v2
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,9 +17,12 @@ gmail_password = os.environ["GMAIL_PASS"]
 def register_notification():
     email = request.json['email']
     name = request.json['name']
-    check_email = Notifications.query.filter_by(email=email).first()
+    subscribed_to = request.json['subscribed_to']
+    find_subscribed_to_user = Messages.query.filter_by(id=subscribed_to).first().pooper_name
+    find_subscribed_to_user_id = Users_v2.query.filter_by(username=find_subscribed_to_user).first().id
+    check_email = Notifications_v2.query.filter_by(email=email).first()
     if check_email == None:
-        add_email = Notifications(name=name,email=email)
+        add_email = Notifications_v2(name=name,email=email, subscribed_to=find_subscribed_to_user_id)
         db.session.add(add_email)
         db.session.commit()
         return jsonify(success=True)
@@ -28,7 +31,7 @@ def register_notification():
 @email_api.route('/unsubscribe', methods=['GET'])
 def unsubscribe():
     email = request.args.get('email')
-    to_delete_email = Notifications.query.filter_by(email=email).first()
+    to_delete_email = Notifications_v2.query.filter_by(email=email).first()
     if to_delete_email != None:
         db.session.delete(to_delete_email)
         db.session.commit()

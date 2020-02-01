@@ -5,7 +5,6 @@
     <input @keyup.enter.exact='addUser' type="text" v-model="username" placeholder="Username"/>
     <input @keyup.enter.exact='addUser' type="password" v-model="password" placeholder="Password"/>
     <input @keyup.enter.exact='addUser' type="password" v-model="retypePassword" placeholder="Retype Password"/>
-    <input @keyup.enter.exact='addUser' type="password" v-model="code" placeholder="Code"/>
     <button @click="addUser">Register</button>
     <div class='sign-up-btn'>Already have an account?<a href="/login"> Login</a></div>
   </div>
@@ -34,12 +33,11 @@ export default {
         axios.post('adduser', {
         username: this.username, 
         password: this.password,
-        code: this.code,
         })
         .then(response => {
             if (response.data.success == false) {
                 this.$router.push({ path: '/register'})
-                this.error = 'Incorrect code'
+                this.error = 'Username already exists'
             } else {
                 this.username = '';
                 this.password = '';
