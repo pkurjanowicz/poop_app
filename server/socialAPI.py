@@ -77,15 +77,17 @@ def submit_comment_poopstream():
     if comment != '': 
         if commenter_id == '':
             commenter_id = 'Anonymous'
-            new_comment = Comments(comment=comment,commenter_name=commenter_name, comment_time=comment_time, comment_message=comment_message)
+            new_comment = Comments(comment=comment,commenter_name=commenter_id, comment_time=comment_time, comment_message=comment_message)
             db.session.add(new_comment)
             db.session.commit()
+            return jsonify(success=True)
         else:
             find_user_name = Users_v2.query.filter_by(id=commenter_id).first().username
             new_comment = Comments(comment=comment,commenter_name=find_user_name, comment_time=comment_time, comment_message=comment_message)
             db.session.add(new_comment)
             db.session.commit()
-        return jsonify(success=True)
+            return jsonify(success=True)
+    return jsonify(success=False)
 
 @social_api.route('/get-comments', methods=['POST'])
 def get_comments():
