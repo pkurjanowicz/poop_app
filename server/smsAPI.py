@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, Blueprint, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 import datetime
-from models import Messages
+from models import Messages, Comments
 from db_instance import db
 import pytz
 from pytz import timezone
@@ -39,6 +39,13 @@ def update_status():
     if date_today != get_poop()['date']:
         return False
     return True
+
+def get_comments(message_id):
+    comment_message = message_id
+    comments = Comments.query.filter_by(comment_message=comment_message).all()
+    comments_list_of_dicts=[{'id':comment.id, 'message': comment.comment,'name': comment.commenter_name, 'time': comment.comment_time, 'likes': comment.comment_likes} for comment in comments ]
+    comments_list_of_dicts_sorted = sorted(comments_list_of_dicts, key = lambda i: i['id'])
+    return comments_list_of_dicts_sorted
 
 #main route
 @sms_api.route("/sms", methods=['GET'])
@@ -84,7 +91,7 @@ def render_app():
 @sms_api.route('/get-all-poops', methods=['GET'])
 def render_poops():
     all_poops = get_all_poops()
-    return_value = [{'name': poop['name'],'last_poop_date': poop['date'],'poop_message': poop['message'], 'poop_rating': poop['rating'],'poop_id': poop['id'], 'poop_likes': poop['poop_likes']} for poop in all_poops]
+    return_value = [{'name': poop['name'],'last_poop_date': poop['date'],'poop_message': poop['message'], 'poop_rating': poop['rating'],'poop_id': poop['id'], 'poop_likes': poop['poop_likes'], 'comments': get_comments(poop['id'])} for poop in all_poops]
     return jsonify(return_value)
 
 @sms_api.route('/get-specific-poop', methods=['POST'])

@@ -114,3 +114,19 @@ def getimagelink():
         user_id = request.json["user_id"]
         image_value = Users_v2.query.filter_by(id=user_id).first().profile_image
         return jsonify(image=image_value)
+
+@users_api.route('/update_number', methods=['POST'])
+def update_number():
+        user_id = request.json["user_id"]
+        phone_number = request.json["number"]
+        update_number = Users_v2.query.filter_by(id=user_id).first().phone_number = phone_number
+        db.session.commit()
+        return jsonify(success=True)
+
+@users_api.route('/get_number', methods=['POST'])
+def get_number():
+        user_id = request.json["user_id"]
+        number = Users_v2.query.filter_by(id=user_id).first().phone_number
+        if number == None:
+                return jsonify(number=None)
+        return jsonify(number=number)

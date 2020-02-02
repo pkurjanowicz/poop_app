@@ -21,9 +21,20 @@
                         <div class="like-comment-box">
                             <span><input type='image' :src='like_btn' @click='like_post(poop.poop_message)'/></span>
                             <span><button @click='openModal(poop.poop_id)'>Subscribe</button></span>
-                            <span><button @click='commentLogin()'>Comment</button></span>
+                            <span>
+                                <md-badge class="md-primary md-square" md-position="bottom" md-content="12">
+                                  <md-button @click='openCommentBox(poop)'>
+                                    Comment
+                                  </md-button>
+                                </md-badge>
+                            </span>
                         </div>
                     </div>
+                    <div class='comments-box' v-if='currently_open == poop.poop_id'>
+                      <div class='comment' v-for='(comment, index) in poop.comments' :key='index'>
+                        <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
+                      </div>
+                    </div> 
                 </div>
             </span>
         </div>
@@ -47,6 +58,8 @@ export default {
             like_btn: require('@/assets/like_PNG90.png'),
             modalView: false,
             pooper_id: '',
+            comments: '',
+            currently_open: '',
         }
     },
     components: {
@@ -56,7 +69,8 @@ export default {
         getAllPoops() {
             axios.get('/get-all-poops')
             .then(resp => {
-                this.allPoops = resp.data
+              console.log(resp.data)
+              this.allPoops = resp.data
             })
         },
         openModal(pooper_id) {
@@ -77,6 +91,9 @@ export default {
       setLikeSession() {
         axios.get('/nonloggedinsession')
         .then()
+      },
+      openCommentBox(poop) {
+        this.currently_open = poop.poop_id
       },
     },
     mounted() {
@@ -149,6 +166,38 @@ export default {
   font-size: 15px;
   background: #7F94CD;
   color: white;
+}
+
+.comment {
+  background: rgb(229, 236, 255);
+  border-radius: 5px;
+  padding: 6px;
+  width: 60%;
+  margin: 0 0 13px 0;
+}
+
+.name {
+  font-size: 14px;
+  color: rgb(35, 61, 125)
+}
+.message {
+  font-size: 18px;
+}
+
+.comment-btn{
+  padding: 7px;
+  font-size: 15px;
+  background: #7F94CD;
+  color: white;
+  width: 20%;
+  margin: 0;
+}
+
+.v-badge__badge{
+  width:auto;
+  border-radius: 12px;
+  padding: 5px 10px;
+  margin-left: 20px
 }
 
 </style>

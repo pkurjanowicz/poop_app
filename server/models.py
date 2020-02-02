@@ -34,11 +34,6 @@ class Users(db.Model):
         self.username = username
         self.pw_hash = make_pw_hash(password)
 
-class PhoneNumber(db.Model): #helper DB so I don't have to add another column to the users database
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    phone_number = db.Column(db.String(120))
-
 class Notifications_v2(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(600),nullable=False)
