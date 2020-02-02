@@ -22,11 +22,12 @@
                             <span><input type='image' :src='like_btn' @click='like_post(poop.poop_message)'/></span>
                             <span><button @click='openModal(poop.poop_id)'>Subscribe</button></span>
                             <span>
-                                <md-badge class="md-primary md-square" md-position="bottom" md-content="12">
-                                  <md-button @click='openCommentBox(poop)'>
-                                    Comment
-                                  </md-button>
-                                </md-badge>
+                                <button @click='openCommentBox(poop)'>
+                                  Comment
+                                </button>
+                                <buttonBadge 
+                                  :content="poop.comments.length"
+                                />
                             </span>
                         </div>
                     </div>
@@ -45,6 +46,7 @@
 import { isAuthenticated } from '../views/helpers.js'
 import axios from 'axios'
 import subscribeModal from '../components/subscribeModal.vue'
+import buttonBadge from '../components/button-badge'
 var Vue = require('vue');
 
 export default {
@@ -63,7 +65,8 @@ export default {
         }
     },
     components: {
-        subscribeModal
+        subscribeModal,
+        buttonBadge
     },
     methods: {
         getAllPoops() {
@@ -93,6 +96,9 @@ export default {
         .then()
       },
       openCommentBox(poop) {
+        if (this.currently_open = poop.poop_id) {
+          this.current_open = ''
+        }
         this.currently_open = poop.poop_id
       },
     },

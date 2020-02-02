@@ -21,7 +21,7 @@ def get_specific_poop(message):
     return poop_dict
 
 def get_all_poops():
-    poops = Messages.query.all()
+    poops = Messages.query.order_by(Messages.id.desc()).limit(15).all()
     poop_list_of_dicts=[{'id':poop.id, 'name': poop.pooper_name, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating, 'poop_likes': poop.poop_likes} for poop in poops ]
     poop_list_of_dicts_sorted = sorted(poop_list_of_dicts, key = lambda i: -i['id'])
     return poop_list_of_dicts_sorted
