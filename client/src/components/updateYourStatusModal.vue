@@ -2,9 +2,12 @@
     <div class="modal-backdrop">
         <div class='status-box'>
             <div class='status-form'>
-                <p><input type='text' placeholder="Input  your poop date"></p>
-                <p><input type='text' placeholder="Input your Message"></p>
-                <p><input type='text' placeholder="Input your rating"></p>
+                <p><input type='text' placeholder="Input your Message" v-model='message'></p>
+                <star-rating 
+                v-model="rating"
+                :show-rating="false"
+                />
+                <p><button @click='submitStatus'>Submit</button></p>
                 <p><button @click='close'>Close</button></p>
             </div>
         </div>
@@ -12,12 +15,46 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating'
+import axios from 'axios'
+
+
+
 export default {
     name: 'updateYourStatusModal',
+    props: ['session_id'],
+    data() {
+        return {
+            message: '',
+            rating: 0,
+        }
+    },
     methods: {
         close() {
             this.$emit('close')
         },
+        submitStatus() {
+            axios.post('update-status', {
+                message: this.message,
+                rating: this.rating,
+                session_id: this.session_id,
+            })
+            .then(() => {
+                this.close()
+            })
+        },
+        mounted() {
+            isAuthenticated().then(data => {
+            if (data['session'] === false) {
+                this.$router.push('/login')
+            } else {
+                this.userSessionID = data['user']
+            }
+            })
+        }
+    },
+    components: {
+        StarRating
     }
 }
 </script>

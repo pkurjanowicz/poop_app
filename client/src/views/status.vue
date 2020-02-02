@@ -44,6 +44,8 @@
 <script>
 import axios from "axios";
 import subscribeModal from '../components/subscribeModal.vue'
+import { isAuthenticated } from '../views/helpers.js'
+
 
 export default {
   name: 'status',

@@ -1,8 +1,9 @@
-from models import Messages, Comments
+from models import Messages, Comments, Users_v2
 from db_instance import db
 from flask import Flask, request, render_template, Blueprint, jsonify
 from datetime import date
 import datetime
+import pytz
 from pytz import timezone
 from collections import Counter
 
@@ -90,3 +91,37 @@ def consecutive_days():
                     'likes': message.poop_likes})
 
     return jsonify(list_of_dicts)
+
+
+
+@status_api.route("/update-status", methods=['POST'])
+def update_status():
+    message = request.json['message']
+    rating = request.json['rating']
+    session_id = request.json['session_id']
+    if rating == 0 or rating == 1 or rating == 2 or rating == 3 or rating == 4 or rating == 5:
+        rating = rating
+    else:
+        rating = 5
+    print(session_id)
+    if session_id != '':
+        
+        user_name = Users_v2.query.filter_by(id=session_id).first().username
+        date_format='%m-%d-%Y'
+        date = datetime.datetime.now(tz=pytz.utc)
+        date = date.astimezone(timezone('US/Pacific'))
+        date_today = date.strftime(date_format)
+        new_poop = Messages(pooper_name=user_name,poop_date=date_today, poop_message=message, poop_rating=rating)
+        db.session.add(new_poop)
+        db.session.commit()
+        # send_notifications(body)
+        return 'Success'
+    return 'Falure'
+
+@status_api.route("/get-specific-user-latest-poop", methods=['POST'])
+def get_specific_user_latest_poop():
+    session_id = request.json['session_id']
+    user_name = Users_v2.query.filter_by(id=session_id).first().username
+    poops = Messages.query.filter_by(pooper_name=user_name).order_by(Messages.id.desc()).limit(1).all()
+    poop_dict=[{'id':poop.id, 'name': poop.pooper_name, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating} for poop in poops]
+    return jsonify(poop_dict)

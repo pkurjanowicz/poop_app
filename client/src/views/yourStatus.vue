@@ -3,24 +3,30 @@
     <updateYourStatusModal
       v-if='modalView'
       @close='modalClose()'
+      :session_id='userSessionID'
     />
     <div class="general-status">
-      <h1>Your Status</h1>
-        <p>Your last poop date: <em><b>{{last_poop_date}}</b></em></p>
-        <div class='rating'>
-          <p>Your message while pooping: <em><b>{{poop_message}}</b></em></p>    
-          <p class='poop-rating'>
-            <span>Poop Rating(out of 5):</span>
-            <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='poop_emoji'/></span>
-          </p>
-          <div class='num-of-likes'>
-            <img :src='num_likes'/>
-            <span>{{likes}}</span>
+      <div v-if='poop_message != ""'>
+        <h1>Your Status</h1>
+          <p>Your last poop date: <em><b>{{last_poop_date}}</b></em></p>
+          <div class='rating'>
+            <p>Your message while pooping: <em><b>{{poop_message}}</b></em></p>    
+            <p class='poop-rating'>
+              <span>Poop Rating(out of 5):</span>
+              <span v-for='(emoji, index) in poop_rating_array' :key='index'><img :src='poop_emoji'/></span>
+            </p>
+            <div class='num-of-likes'>
+              <img :src='num_likes'/>
+              <span>{{likes}}</span>
+            </div>
+            <hr>
           </div>
-          <hr>
-          <div>
-            <button @click='openModal()'>Update Your Status</button>
-          </div>
+        </div>
+        <div v-else>
+          <h1>Please Update your Status</h1>
+        </div>
+        <div>
+          <button @click='openModal()'>Update Your Status</button>
         </div>
       </div>
   </div>
@@ -29,6 +35,8 @@
 <script>
 import axios from "axios";
 import updateYourStatusModal from '../components/updateYourStatusModal'
+import { isAuthenticated } from '../views/helpers.js'
+
 
 export default {
   name: 'status',
@@ -44,6 +52,7 @@ export default {
         poop_rating_array: [], //this is to interate through and generate emojis
         modalView: false,
         likes: '',
+        userSessionID: '',
       }
     },
     components: {
@@ -55,21 +64,22 @@ export default {
     },
     modalClose() {
       this.modalView=false
+      this.getPoopDetails()
     },
     getPoopDetails() {
-      axios.get('get-poops')
+      axios.post('get-specific-user-latest-poop', {
+        session_id: this.userSessionID
+      })
       .then(resp => {
-        this.message = resp.data.message
-        this.last_poop_date = resp.data.last_poop_date
-        this.poop_message = resp.data.poop_message
-        this.poop_rating = resp.data.poop_rating
-        this.message_id = resp.data.poop_id
+        this.last_poop_date = resp.data[0].date
+        this.poop_message = resp.data[0].message
+        this.poop_rating = resp.data[0].rating
+        this.message_id = resp.data[0].id
         //this for loop just determines how many emojis will be used
         for (let step = 0; step < Number(this.poop_rating); step++) {
         this.poop_rating_array.push('0')
         }
         this.getCurrentLikes()
-        this.getAllComments()
       })
     },
     like_post() {
@@ -126,21 +136,17 @@ export default {
       .then(resp => {
         this.comments = resp.data
       })
-    },
-    setLikeSession() {
-      axios.get('/nonloggedinsession')
-      .then()
-    },
-    deleteLikeSession() {
-      axios.get('/deletenonloggedinsession')
-      .then()
     }
   },
-  beforeMount() {
-    this.getPoopDetails()
-  },
   mounted() {
-    this.deleteLikeSession()
+      isAuthenticated().then(data => {
+      if (data['session'] === false) {
+          this.$router.push('/login')
+      } else {
+          this.userSessionID = data['user']
+          this.getPoopDetails()
+      }
+    })
   }
 }
 </script>
@@ -198,7 +204,7 @@ em b{
   font-size: 14px;
 }
 
-.rating button {
+button {
   padding: 7px;
   font-size: 15px;
   background: #7F94CD;
