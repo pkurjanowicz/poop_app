@@ -1,6 +1,9 @@
 <template>
     <div class="modal-backdrop">
         <div class='status-box'>
+            <div>
+                <span class='error'>{{errors}}</span>
+            </div>
             <div class='status-form'>
                 <p><input type='text' placeholder="Input your Message" v-model='message'></p>
                 <star-rating 
@@ -27,6 +30,7 @@ export default {
         return {
             message: '',
             rating: 0,
+            errors: '',
         }
     },
     methods: {
@@ -34,14 +38,18 @@ export default {
             this.$emit('close')
         },
         submitStatus() {
-            axios.post('update-status', {
+            if (this.message == '' || this.rating == 0) {
+                this.errors = 'Please input a rating or message'
+            } else {
+                axios.post('update-status', {
                 message: this.message,
                 rating: this.rating,
                 session_id: this.session_id,
-            })
-            .then(() => {
-                this.close()
-            })
+                })
+                .then(() => {
+                    this.close()
+                })
+            }
         },
         mounted() {
             isAuthenticated().then(data => {
