@@ -1,7 +1,7 @@
 <template>
     <div class="modal-backdrop">
         <div class='subscribe-box' v-if='!response'>
-            <button class="x-out-button" @click='close'> X </button>
+            <!-- <button class="x-out-button" @click='close'> X </button> -->
             <div class='subscribe-form'>
                 <div v-for='(error,index) in errors' :key='index'>
                     <span class='error'>{{error}}</span>
@@ -9,12 +9,14 @@
                 <input type='text' placeholder="Enter Your Name..." v-model='name'/>
                 <input type='text' placeholder="Enter Your Email..." v-model='email'/>
                 <span class='submit-form'><button @click='checkForm(pooper_id)'>Subscribe</button></span>
+                <p><button @click='close'>Close</button></p>
             </div>
         </div>
         <div class='subscribe-box' v-else>
-            <button class="x-out-button" @click='close'> X </button>
+            <!-- <button class="x-out-button" @click='close'> X </button>  -->
             <div class='subscribe-form'>
                 <p>Thank you for your subscription!</p>
+                <p><button @click='close'>Close</button></p>
             </div>
         </div>
     </div>
@@ -101,8 +103,8 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    height: 300px;
-    width: 300px;
+    height: 70%;
+    width: 100%;
     padding:30px;
 }
 

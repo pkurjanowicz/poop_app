@@ -25,9 +25,7 @@
                                 <button @click='openCommentBox(poop)'>
                                   Comments
                                 </button>
-                                <buttonBadge 
-                                  :content="poop.comments.length"
-                                />
+                                <span class='badge' v-if='modalView == false'>{{poop.comments.length}}</span>
                             </span>
                         </div>
                     </div>
@@ -50,7 +48,6 @@
 import { isAuthenticated } from '../views/helpers.js'
 import axios from 'axios'
 import subscribeModal from '../components/subscribeModal.vue'
-import buttonBadge from '../components/button-badge'
 var Vue = require('vue');
 
 export default {
@@ -71,7 +68,6 @@ export default {
     },
     components: {
         subscribeModal,
-        buttonBadge
     },
     methods: {
         getAllPoops() {
@@ -222,6 +218,18 @@ button {
 
 .page-button {
   margin: 10px 10px 0 0;
+}
+
+.badge {
+    background-color: rgb(167, 0, 0);
+    color: white;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px; 
+    font-size: 12px;
+    position: relative;
+    right: 7px;
+    top: 14px;
 }
 
 </style>
