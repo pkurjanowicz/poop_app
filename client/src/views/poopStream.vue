@@ -23,7 +23,7 @@
                             <span><button @click='openModal(poop.poop_id)'>Subscribe</button></span>
                             <span>
                                 <button @click='openCommentBox(poop)'>
-                                  Comment
+                                  Comments
                                 </button>
                                 <buttonBadge 
                                   :content="poop.comments.length"
@@ -79,7 +79,6 @@ export default {
               offset: this.offset
             })
             .then(resp => {
-              console.log(resp.data)
               this.allPoops = resp.data
             })
         },
@@ -103,10 +102,11 @@ export default {
         .then()
       },
       openCommentBox(poop) {
-        if (this.currently_open = poop.poop_id) {
-          this.current_open = ''
+        if (this.currently_open === poop.poop_id) {
+          this.currently_open = ''
+        } else {
+          this.currently_open = poop.poop_id
         }
-        this.currently_open = poop.poop_id
       },
       nextPage() {
         this.offset = this.offset += 10
