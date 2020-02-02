@@ -20,8 +20,8 @@ def get_specific_poop(message):
     poop_dict=[{'id':poop.id, 'name': poop.pooper_name, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating, 'poop_likes': poop.poop_likes}]
     return poop_dict
 
-def get_all_poops():
-    poops = Messages.query.order_by(Messages.id.desc()).limit(15).all()
+def get_all_poops(offset):
+    poops = Messages.query.order_by(Messages.id.desc()).offset(offset).limit(10).all()
     poop_list_of_dicts=[{'id':poop.id, 'name': poop.pooper_name, 'date': poop.poop_date, 'message': poop.poop_message, 'rating': poop.poop_rating, 'poop_likes': poop.poop_likes} for poop in poops ]
     poop_list_of_dicts_sorted = sorted(poop_list_of_dicts, key = lambda i: -i['id'])
     return poop_list_of_dicts_sorted
@@ -88,9 +88,10 @@ def render_app():
             'poop_id': get_poop()['id']
         })
 
-@sms_api.route('/get-all-poops', methods=['GET'])
+@sms_api.route('/get-all-poops', methods=['POST'])
 def render_poops():
-    all_poops = get_all_poops()
+    offset = request.json['offset']
+    all_poops = get_all_poops(offset)
     return_value = [{'name': poop['name'],'last_poop_date': poop['date'],'poop_message': poop['message'], 'poop_rating': poop['rating'],'poop_id': poop['id'], 'poop_likes': poop['poop_likes'], 'comments': get_comments(poop['id'])} for poop in all_poops]
     return jsonify(return_value)
 

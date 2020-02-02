@@ -38,6 +38,10 @@
                     </div> 
                 </div>
             </span>
+            <div class='page-buttons'>
+              <button v-if='offset != 0' @click='previousPage()' class='page-button'>Previous Page</button>
+              <button @click='nextPage()' class='page-button'>Next Page</button>
+            </div>
         </div>
     </div>
 </template>
@@ -62,6 +66,7 @@ export default {
             pooper_id: '',
             comments: '',
             currently_open: '',
+            offset: 0,
         }
     },
     components: {
@@ -70,7 +75,9 @@ export default {
     },
     methods: {
         getAllPoops() {
-            axios.get('/get-all-poops')
+            axios.post('/get-all-poops', {
+              offset: this.offset
+            })
             .then(resp => {
               console.log(resp.data)
               this.allPoops = resp.data
@@ -101,6 +108,16 @@ export default {
         }
         this.currently_open = poop.poop_id
       },
+      nextPage() {
+        this.offset = this.offset += 10
+        this.getAllPoops()
+        window.scrollTo(0,0);
+      },
+      previousPage() {
+        this.offset = this.offset -= 10
+        this.getAllPoops()
+        window.scrollTo(0,0);
+      }
     },
     mounted() {
     this.getAllPoops()
@@ -114,6 +131,14 @@ export default {
 </script>
 
 <style scoped>
+
+button {
+  padding: 7px;
+  font-size: 15px;
+  background: #7F94CD;
+  color: white;
+}
+
 .main-container {
     margin: 70px 30px;
 }
@@ -167,13 +192,6 @@ export default {
   padding: 5px;
 }
 
-.like-comment-box button {
-  padding: 7px;
-  font-size: 15px;
-  background: #7F94CD;
-  color: white;
-}
-
 .comment {
   background: rgb(229, 236, 255);
   border-radius: 5px;
@@ -191,10 +209,6 @@ export default {
 }
 
 .comment-btn{
-  padding: 7px;
-  font-size: 15px;
-  background: #7F94CD;
-  color: white;
   width: 20%;
   margin: 0;
 }
@@ -204,6 +218,10 @@ export default {
   border-radius: 12px;
   padding: 5px 10px;
   margin-left: 20px
+}
+
+.page-button {
+  margin: 10px 10px 0 0;
 }
 
 </style>
