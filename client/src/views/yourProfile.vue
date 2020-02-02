@@ -2,17 +2,6 @@
     <div class='main-container'>
         <div class="sub-container">
           <p class='error' v-if='error'>{{error}}</p>
-          <button @click='inputNumberClick()'>Input your phone number</button>
-          <p v-if='openNumberInput == false && validSubmission'>Phone Number Updated!</p>
-          <div v-if='openNumberInput' class='phone-input'>
-            <vue-tel-input 
-              v-bind="bindProps"
-              placeholder='Phone Number...'
-              @onInput='onInput'
-            />
-            <button @click='submitNumber'>Submit</button>
-          </div>
-          <button @click='openModal'>Edit Your Profile</button>
             <div class='profile-container'>
               <div class='profile-bio'>
                 <h3 v-if='current_number != null' class='current-number-parent'>Your Phone Number
@@ -21,10 +10,21 @@
                 <h3 v-else class='current-number-parent' >Your Phone Number
                 <span class='current-number'>Please Input Your Number</span>
                 </h3>
+                <button @click='inputNumberClick()'>Input your phone number</button>
+                <p v-if='openNumberInput == false && validSubmission'>Phone Number Updated!</p>
+                <div v-if='openNumberInput' class='phone-input'>
+                  <vue-tel-input 
+                    v-bind="bindProps"
+                    placeholder='Phone Number...'
+                    @onInput='onInput'
+                  />
+                  <button @click='submitNumber'>Submit</button>
+                </div>
                 <hr>
                 <h3>Your Profile</h3>
                 <p v-if='!profileBio'>Please enter a profile</p>
                 <p v-else style="white-space: pre-line">{{profileBio}}</p>
+                <button @click='openModal'>Edit Your Profile</button>
                 <hr>
               </div>
               <br>
