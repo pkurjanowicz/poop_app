@@ -76,8 +76,10 @@ export default {
         this.poop_rating = resp.data[0].rating
         this.message_id = resp.data[0].id
         //this for loop just determines how many emojis will be used
-        for (let step = 0; step < Number(this.poop_rating); step++) {
-        this.poop_rating_array.push('0')
+        if (this.poop_rating_array == '') {
+          for (let step = 0; step < Number(this.poop_rating); step++) {
+            this.poop_rating_array.push('0')
+          }
         }
         this.getCurrentLikes()
       })
