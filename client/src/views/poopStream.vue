@@ -33,6 +33,10 @@
                       <div class='comment' v-for='(comment, index) in poop.comments' :key='index'>
                         <span class='name'>{{comment.name}}</span><br><span class='message'>{{comment.message}}</span>
                       </div>
+                      <div class='commit-submit'>
+                        <input type='text' :placeholder='placeHolder' v-on:keyup.enter='submitComment(poop.poop_id)' v-model='comment'>
+                        <p><button class="form-btn" @click='submitComment(poop.poop_id)'>Submit</button></p>
+                      </div>
                     </div> 
                 </div>
             </span>
@@ -64,6 +68,8 @@ export default {
             comments: '',
             currently_open: '',
             offset: 0,
+            placeHolder: 'Leave a Comment...',
+            comment: '',
         }
     },
     components: {
@@ -105,15 +111,26 @@ export default {
         }
       },
       nextPage() {
-        this.offset = this.offset += 10
+        this.offset = this.offset += 5
         this.getAllPoops()
         window.scrollTo(0,0);
       },
       previousPage() {
-        this.offset = this.offset -= 10
+        this.offset = this.offset -= 5
         this.getAllPoops()
         window.scrollTo(0,0);
-      }
+      },
+      submitComment(message_id) {
+      axios.post('submit-comment-poopstream',{
+        comment: this.comment,
+        session_id: this.userSessionID,
+        message: message_id
+      })
+      .then(() => {
+        this.comment = ''
+        this.getAllPoops()
+      })
+    },
     },
     mounted() {
     this.getAllPoops()
@@ -230,6 +247,13 @@ button {
     position: relative;
     right: 7px;
     top: 14px;
+}
+
+.commit-submit input[type='text'] {
+  width: 80%;
+  padding: 10px;
+  font-size: 15px;
+  margin: 10px 0;
 }
 
 </style>

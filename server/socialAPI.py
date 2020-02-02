@@ -1,4 +1,4 @@
-from models import Messages, Comments
+from models import Messages, Comments,Users_v2
 from db_instance import db
 from flask import Flask, request, render_template, Blueprint, jsonify, session
 from datetime import datetime
@@ -54,7 +54,7 @@ def get_likes():
     num_of_likes = find_post.poop_likes
     return jsonify(likes=num_of_likes)
 
-@social_api.route('/submit-comment', methods=['POST'])
+@social_api.route('/submit-comment', methods=['POST']) #from Shants status page
 def submit_comment():
     comment = request.json['comment']
     commenter_name = request.json['name']
@@ -66,6 +66,25 @@ def submit_comment():
         new_comment = Comments(comment=comment,commenter_name=commenter_name, comment_time=comment_time, comment_message=comment_message)
         db.session.add(new_comment)
         db.session.commit()
+        return jsonify(success=True)
+
+@social_api.route('/submit-comment-poopstream', methods=['POST']) #from the poopstream page
+def submit_comment_poopstream():
+    comment = request.json['comment']
+    commenter_id = request.json['session_id']
+    comment_time = datetime.utcnow()
+    comment_message = request.json['message']
+    if comment != '': 
+        if commenter_id == '':
+            commenter_id = 'Anonymous'
+            new_comment = Comments(comment=comment,commenter_name=commenter_name, comment_time=comment_time, comment_message=comment_message)
+            db.session.add(new_comment)
+            db.session.commit()
+        else:
+            find_user_name = Users_v2.query.filter_by(id=commenter_id).first().username
+            new_comment = Comments(comment=comment,commenter_name=find_user_name, comment_time=comment_time, comment_message=comment_message)
+            db.session.add(new_comment)
+            db.session.commit()
         return jsonify(success=True)
 
 @social_api.route('/get-comments', methods=['POST'])
