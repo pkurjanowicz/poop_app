@@ -1,6 +1,9 @@
 <template>
     <div class="modal-backdrop">
         <div class='status-box'>
+            <loading :active.sync="isLoading" 
+                :is-full-page="fullPage"
+            />
             <div>
                 <span class='error'>{{errors}}</span>
             </div>
@@ -20,6 +23,8 @@
 <script>
 import StarRating from 'vue-star-rating'
 import axios from 'axios'
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 
 
 
@@ -31,6 +36,8 @@ export default {
             message: '',
             rating: 0,
             errors: '',
+            isLoading: false,
+            fullPage: true
         }
     },
     methods: {
@@ -41,12 +48,14 @@ export default {
             if (this.message == '' || this.rating == 0) {
                 this.errors = 'Please input a rating or message'
             } else {
+                this.isLoading = true
                 axios.post('update-status', {
                 message: this.message,
                 rating: this.rating,
                 session_id: this.session_id,
                 })
                 .then(() => {
+                    this.isLoading = false
                     this.close()
                 })
             }
@@ -62,7 +71,8 @@ export default {
         }
     },
     components: {
-        StarRating
+        StarRating,
+        Loading
     }
 }
 </script>
