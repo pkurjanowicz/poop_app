@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, render_template
 from db_instance import db
-from models import Notifications_v2, Messages, Notifications, Users, Users_v2
+from models import Notifications_v2, Messages, Users_v2
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -20,7 +20,7 @@ def register_notification():
     subscribed_to = request.json['subscribed_to']
     find_subscribed_to_user = Messages.query.filter_by(id=subscribed_to).first().pooper_name
     find_subscribed_to_user_id = Users_v2.query.filter_by(username=find_subscribed_to_user).first().id
-    check_email = Notifications_v2.query.filter_by(email=email).first()
+    check_email = Notifications_v2.query.filter(Notifications_v2.email==email, Notifications_v2.subscribed_to==find_subscribed_to_user_id).first() 
     if check_email == None:
         add_email = Notifications_v2(name=name,email=email, subscribed_to=find_subscribed_to_user_id)
         db.session.add(add_email)
@@ -39,31 +39,32 @@ def unsubscribe():
         return '<h1> You are already unsubscribed!</h1>'
     return '<h1>Thanks for successfully unsubscribing!</h1>'
 
-def send_notifications(poop_message):
+def send_notifications(poop_message,user):
     #get all emails
-    emails = Notifications.query.all()
+    emails = Notifications_v2.query.filter_by(subscribed_to=user).all()
+    subscribed_to_user = Users_v2.query.filter_by(id=user).first().username
     emails_list = [email.email for email in emails]
     for email in emails_list:
         #send emails
-        name = Notifications.query.filter_by(email=email).first().name
+        name = Notifications_v2.query.filter_by(email=email).first().name
         msg = MIMEMultipart()
         msg['From'] = gmail_user
         msg['To'] = email
-        msg['Subject'] = 'Shant just Shatted!'
+        msg['Subject'] = '{} just Shatted!'.format(subscribed_to_user)
         # Create the body of the message (a plain-text and an HTML version).
         html = """\
         <html>
         <head></head>
         <body>
             <p>Hi {},</p>
-            <p>Guess what!!!, Shant just sharted, here is his message:</p>
+            <p>Guess what!!!, {} just sharted, here is his message:</p>
             <p><em>"{}"</em></p>
             <p>Sincerely,</p>
             <p>The Poop Team</p><br><br><br>
             <span><a href='http://www.didshantpoop.com/unsubscribe?email={}'>Click here to unsubscribe</a></span>
         </body>
         </html>
-        """.format(name,poop_message,email)
+        """.format(name,subscribed_to_user,poop_message,email)
 
         part2 = MIMEText(html, 'html')
 

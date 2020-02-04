@@ -18,27 +18,11 @@ class Comments(db.Model):
     comment_message = db.Column(db.Integer, db.ForeignKey('messages.id'),
         nullable=False)
 
-class Notifications(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(600),nullable=False)
-    email = db.Column(db.String(600),nullable=False)
-    
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(500))
-    pw_hash = db.Column(db.String(500))
-    profile_image = db.Column(db.String(120))
-    profile_bio = db.Column(db.String(1000))
-
-    def __init__(self, username, password):
-        self.username = username
-        self.pw_hash = make_pw_hash(password)
-
 class Notifications_v2(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(600),nullable=False)
     email = db.Column(db.String(600),nullable=False)
-    subscribed_to = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    subscribed_to = db.Column(db.Integer, db.ForeignKey('users_v2.id'), nullable=False)
 
 class Users_v2(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -6,6 +6,8 @@ import datetime
 import pytz
 from pytz import timezone
 from collections import Counter
+from emailAPI import send_notifications
+
 
 status_api = Blueprint('status_api', __name__)
 
@@ -103,10 +105,9 @@ def update_status():
         rating = rating
     else:
         rating = 5
-    print(session_id)
     if session_id != '':
-        
         user_name = Users_v2.query.filter_by(id=session_id).first().username
+        user_id = Users_v2.query.filter_by(id=session_id).first().id
         date_format='%m-%d-%Y'
         date = datetime.datetime.now(tz=pytz.utc)
         date = date.astimezone(timezone('US/Pacific'))
@@ -114,7 +115,7 @@ def update_status():
         new_poop = Messages(pooper_name=user_name,poop_date=date_today, poop_message=message, poop_rating=rating)
         db.session.add(new_poop)
         db.session.commit()
-        # send_notifications(body)
+        send_notifications(message,user_id)
         return 'Success'
     return 'Falure'
 

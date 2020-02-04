@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request, session
 from db_instance import db
 import random
 import string
-from models import Users, Users_v2
+from models import Users_v2
 from hashutils import make_pw_hash, check_pw_hash
 import os
 

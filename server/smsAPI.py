@@ -65,7 +65,7 @@ def sms_ahoy_reply():
         new_poop = Messages(pooper_name='Shant',poop_date=date_today, poop_message=body, poop_rating=rating)
         db.session.add(new_poop)
         db.session.commit()
-        send_notifications(body)
+        send_notifications(body, 5)
         return 'Success'
     return 'Falure'
 
