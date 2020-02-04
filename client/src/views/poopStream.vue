@@ -147,7 +147,7 @@ export default {
 
 button {
   padding: 7px;
-  font-size: 15px;
+  font-size: 12px;
   background: #7F94CD;
   color: white;
 }
