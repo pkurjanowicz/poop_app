@@ -31,7 +31,8 @@ def register_notification():
 @email_api.route('/unsubscribe', methods=['GET'])
 def unsubscribe():
     email = request.args.get('email')
-    to_delete_email = Notifications_v2.query.filter_by(email=email).first()
+    user = request.args.get('user')
+    to_delete_email = Notifications_v2.query.filter(Notifications_v2.email==email, Notifications_v2.subscribed_to==user).first() 
     if to_delete_email != None:
         db.session.delete(to_delete_email)
         db.session.commit()
@@ -61,10 +62,10 @@ def send_notifications(poop_message,user):
             <p><em>"{}"</em></p>
             <p>Sincerely,</p>
             <p>The Poop Team</p><br><br><br>
-            <span><a href='http://www.didshantpoop.com/unsubscribe?email={}'>Click here to unsubscribe</a></span>
+            <span><a href='http://www.didshantpoop.com/unsubscribe?email={}&user={}'>Click here to unsubscribe</a></span>
         </body>
         </html>
-        """.format(name,subscribed_to_user,poop_message,email)
+        """.format(name,subscribed_to_user,poop_message,email,user)
 
         part2 = MIMEText(html, 'html')
 
