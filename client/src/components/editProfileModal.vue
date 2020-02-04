@@ -13,7 +13,7 @@
                 </label><br>
                 <p class='file-name' v-if="file">{{file.name}}</p>
                 <h4>Update your profile</h4>
-                <textarea cols="50" rows="8" v-model="profile"/>
+                <textarea cols="40" rows="8" v-model="profile"/>
                 <button @click="submit()">Submit</button><br>
                 <p class='file-name' v-if='successfulSave'>You have successfully updated your profile!</p>
             </div>
@@ -134,8 +134,8 @@ export default {
     overflow-x: auto;
     display: flex;
     flex-direction: column;
-    height: 500px;
-    width: 400px;
+    height: 400px;
+    width: 100%;
     padding:30px;
 }
 .modal-box-loading{
