@@ -234,7 +234,7 @@ button {
 }
 
 .page-button {
-  margin: 10px 10px 0 0;
+  margin: 10px 10px 80px 0;
 }
 
 .badge {
