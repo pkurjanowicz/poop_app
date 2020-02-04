@@ -23,9 +23,9 @@
                             <span><button @click='openModal(poop.poop_id)'>Subscribe</button></span>
                             <span>
                                 <button @click='openCommentBox(poop)'>
-                                  Comments
+                                  Comments({{poop.comments.length}})
                                 </button>
-                                <span class='badge' v-if='modalView == false'>{{poop.comments.length}}</span>
+                                <!-- <span class='badge' v-if='modalView == false'>{{poop.comments.length}}</span> -->
                             </span>
                         </div>
                     </div>
