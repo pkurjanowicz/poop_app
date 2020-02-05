@@ -5,6 +5,11 @@
       @close='modalClose()'
       :session_id='userSessionID'
     />
+    <updateCurrentStatusModal
+      v-if='modalViewCurrent'
+      @close='modalCloseCurrent()'
+      :session_id='userSessionID'
+    />
     <div class="general-status">
       <div v-if='poop_message != ""'>
         <h1>Your Status</h1>
@@ -26,7 +31,8 @@
           <h1>Please Update your Status</h1>
         </div>
         <div>
-          <button @click='openModal()'>Update Your Status</button>
+          <button @click='openModal()'>Submit New Status</button>
+          <!-- <button @click='openModalCurrent()'>Change Current Status</button> -->
         </div>
       </div>
   </div>
@@ -35,6 +41,7 @@
 <script>
 import axios from "axios";
 import updateYourStatusModal from '../components/updateYourStatusModal'
+import updateCurrentStatusModal from '../components/updateCurrentStatusModal'
 import { isAuthenticated } from '../views/helpers.js'
 
 
@@ -51,12 +58,14 @@ export default {
         poop_rating: '',
         poop_rating_array: [], //this is to interate through and generate emojis
         modalView: false,
+        modalViewCurrent: false,
         likes: '',
         userSessionID: '',
       }
     },
     components: {
-      updateYourStatusModal
+      updateYourStatusModal,
+      updateCurrentStatusModal
     },
     methods: {
     openModal() {
@@ -64,6 +73,13 @@ export default {
     },
     modalClose() {
       this.modalView=false
+      this.getPoopDetails()
+    },
+    openModalCurrent() {
+      this.modalViewCurrent=true
+    },
+    modalCloseCurrent() {
+      this.modalViewCurrent=false
       this.getPoopDetails()
     },
     getPoopDetails() {

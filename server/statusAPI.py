@@ -96,7 +96,7 @@ def consecutive_days():
 
 
 
-@status_api.route("/update-status", methods=['POST'])
+@status_api.route("/update-status", methods=['POST']) #create new status
 def update_status():
     message = request.json['message']
     rating = request.json['rating']
@@ -116,6 +116,31 @@ def update_status():
         db.session.add(new_poop)
         db.session.commit()
         send_notifications(message,user_id)
+        return 'Success'
+    return 'Falure'
+
+@status_api.route("/update-status-current", methods=['POST']) #update current status instead of create a new one...
+def update_status_current():
+    message = request.json['message']
+    rating = request.json['rating']
+    session_id = request.json['session_id']
+    if rating == 0 or rating == 1 or rating == 2 or rating == 3 or rating == 4 or rating == 5:
+        rating = rating
+    else:
+        rating = 5
+    if session_id != '':
+        user_name = Users_v2.query.filter_by(id=session_id).first().username
+        user_id = Users_v2.query.filter_by(id=session_id).first().id
+        date_format='%m-%d-%Y'
+        date = datetime.datetime.now(tz=pytz.utc)
+        date = date.astimezone(timezone('US/Pacific'))
+        date_today = date.strftime(date_format)
+        find_current_message = Messages.query.filter_by(pooper_name=user_name).order_by(Messages.id.desc()).limit(1).first().poop_message
+        update_status_message = Messages.query.filter_by(poop_message=find_current_message).first().poop_message = message
+        db.session.commit()
+        update_status_rating = Messages.query.filter_by(poop_message=message).first().poop_rating = rating
+        db.session.commit()
+        # send_notifications(message,user_id) #no need to notify the people...thats a little aggressive
         return 'Success'
     return 'Falure'
 
